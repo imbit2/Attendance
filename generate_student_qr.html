@@ -11,13 +11,13 @@
 
 <div class="card">
   <label>Student ID</label>
-  <input id="id" readonly>
+  <input id="studentId" readonly>
 
   <label>Student Name</label>
-  <input id="name">
+  <input id="studentName">
 
   <label>Father's Name</label>
-  <input id="father">
+  <input id="fatherName">
 
   <label>DOB</label>
   <input type="date" id="dob">
@@ -26,7 +26,7 @@
   <input id="address">
 </div>
 
-<!-- PVC CARD (initially empty) -->
+<!-- PVC CARD -->
 <div class="pvc-card" id="printCard" style="display:none;">
   <div class="card-header">
     <div class="school-name">ABC COACHING CENTRE</div>
@@ -41,16 +41,13 @@
       <div><b>DOB:</b> <span id="cardDob"></span></div>
       <div><b>Address:</b> <span id="cardAddress"></span></div>
     </div>
-
     <div class="qr-area" id="qr"></div>
   </div>
 
-  <div class="card-footer">
-    Valid for Academic Use Only
-  </div>
+  <div class="card-footer">Valid for Academic Use Only</div>
 </div>
 
-<button onclick="saveStudent()">Save Student</button>
+<button id="saveBtn">Save Student</button>
 <button onclick="printPVC()">Print PVC Card</button>
 
 <script src="generate_student_qr.js"></script>
