@@ -120,7 +120,7 @@ input, textarea {
 }
 
 .pvc-details .title {
-  font-size: 19px;
+  font-size: 15px;
   margin-bottom: 6px;
 }
 
@@ -130,8 +130,8 @@ input, textarea {
 
 /* RIGHT SIDE QR */
 .pvc-qr {
-  width: 22mm;
-  height: 22mm;
+  width: 18mm;
+  height: 18mm;
   background: #fff;
   padding: 3px;
   border-radius: 4px;
@@ -202,5 +202,6 @@ th {
     page-break-inside: avoid;
   }
 }
+
 
 
