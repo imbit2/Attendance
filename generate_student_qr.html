@@ -9,25 +9,49 @@
 
 <h2>Generate Student QR</h2>
 
-<label>ID</label>
-<input id="id" readonly>
+<div class="card">
 
-<label>Name</label>
-<input id="name">
+  <label>Student ID</label>
+  <input id="id" readonly>
 
-<label>Father</label>
-<input id="father">
+  <label>Student Name</label>
+  <input id="name">
 
-<label>DOB</label>
-<input type="date" id="dob">
+  <label>Father's Name</label>
+  <input id="father">
 
-<label>Address</label>
-<input id="address">
+  <label>DOB</label>
+  <input type="date" id="dob">
 
-<div id="qr"></div>
+  <label>Address</label>
+  <input id="address">
 
-<button onclick="save()">Save</button>
-<button onclick="window.print()">Print Card</button>
+</div>
+
+<!-- PVC CARD -->
+<div class="pvc-card" id="printCard">
+  <div class="card-header">
+    <div class="school-name">ABC COACHING CENTRE</div>
+    <div class="card-title">STUDENT ID CARD</div>
+  </div>
+
+  <div class="card-body">
+    <div class="student-info">
+      <div><b>ID:</b> <span id="cardId"></span></div>
+      <div><b>Name:</b> <span id="cardName"></span></div>
+      <div><b>DOB:</b> <span id="cardDob"></span></div>
+    </div>
+
+    <div class="qr-area" id="qr"></div>
+  </div>
+
+  <div class="card-footer">
+    Valid for Academic Use Only
+  </div>
+</div>
+
+<button onclick="saveStudent()">Save Student</button>
+<button onclick="printCard()">Print PVC Card</button>
 
 <script src="generate_student_qr.js"></script>
 </body>
