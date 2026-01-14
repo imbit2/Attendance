@@ -1,49 +1,55 @@
-let students = JSON.parse(localStorage.getItem("students") || "[]");
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Student QR</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+</head>
+<body>
 
-// generate next ID safely
-let next = students.length + 1;
-let sid = "STU" + String(next).padStart(4, "0");
-id.value = sid;
+<h2>Generate Student QR</h2>
 
-function saveStudent() {
-  // collect values FIRST
-  let student = {
-    id: sid,
-    name: name.value.trim(),
-    father: father.value.trim(),
-    dob: dob.value,
-    address: address.value.trim()
-  };
+<div class="card">
+  <label>Student ID</label>
+  <input id="studentId" readonly>
 
-  // save to storage
-  students.push(student);
-  localStorage.setItem("students", JSON.stringify(students));
+  <label>Student Name</label>
+  <input id="studentName">
 
-  // show PVC card
-  document.getElementById("printCard").style.display = "block";
+  <label>Father's Name</label>
+  <input id="fatherName">
 
-  // fill PVC card details
-  cardId.innerText = student.id;
-  cardName.innerText = student.name;
-  cardFather.innerText = student.father;
-  cardDob.innerText = student.dob;
-  cardAddress.innerText = student.address;
+  <label>DOB</label>
+  <input type="date" id="dob">
 
-  // generate QR NOW (after save)
-  qr.innerHTML = "";
-  new QRCode(qr, {
-    text: student.id,
-    width: 90,
-    height: 90
-  });
+  <label>Address</label>
+  <input id="address">
+</div>
 
-  alert("Student saved & QR generated");
-}
+<!-- PVC CARD -->
+<div class="pvc-card" id="printCard" style="display:none;">
+  <div class="card-header">
+    <div class="school-name">ABC COACHING CENTRE</div>
+    <div class="card-title">STUDENT ID CARD</div>
+  </div>
 
-function printPVC() {
-  if (document.getElementById("printCard").style.display === "none") {
-    alert("Please save student first");
-    return;
-  }
-  window.print();
-}
+  <div class="card-body">
+    <div class="student-info">
+      <div><b>ID:</b> <span id="cardId"></span></div>
+      <div><b>Name:</b> <span id="cardName"></span></div>
+      <div><b>Father:</b> <span id="cardFather"></span></div>
+      <div><b>DOB:</b> <span id="cardDob"></span></div>
+      <div><b>Address:</b> <span id="cardAddress"></span></div>
+    </div>
+    <div class="qr-area" id="qr"></div>
+  </div>
+
+  <div class="card-footer">Valid for Academic Use Only</div>
+</div>
+
+<button id="saveBtn">Save Student</button>
+<button onclick="printPVC()">Print PVC Card</button>
+
+<script src="generate_student_qr.js"></script>
+</body>
+</html>
