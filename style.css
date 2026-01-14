@@ -117,3 +117,76 @@ button:hover {
     margin: auto;
   }
 }
+/* ================= PVC STUDENT CARD ================= */
+
+.pvc-card {
+  width: 85.6mm;
+  height: 53.98mm;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1.5px solid #3498db;
+  margin: 20px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.card-header {
+  background: #3498db;
+  color: #fff;
+  text-align: center;
+  padding: 4px;
+}
+
+.school-name {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.card-title {
+  font-size: 9px;
+}
+
+.card-body {
+  display: flex;
+  padding: 6px;
+}
+
+.student-info {
+  flex: 1;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.qr-area {
+  width: 24mm;
+  height: 24mm;
+}
+
+.card-footer {
+  text-align: center;
+  font-size: 7px;
+  color: #555;
+  border-top: 1px solid #eee;
+  padding: 2px;
+}
+
+/* PRINT ONLY CARD */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #printCard, #printCard * {
+    visibility: visible;
+  }
+
+  #printCard {
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}
+
