@@ -127,7 +127,7 @@ input, textarea {
   position: absolute;
 
   right: 6mm;
-  bottom: 1mm;
+  bottom: 12mm;
 
   width: 24mm;
   height: 24mm;
@@ -193,6 +193,7 @@ th {
     page-break-inside: avoid;
   }
 }
+
 
 
 
