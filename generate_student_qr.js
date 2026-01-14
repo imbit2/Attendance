@@ -1,13 +1,20 @@
-const students = JSON.parse(localStorage.getItem("students") || "[]");
+// ===============================
+// Load students from storage
+// ===============================
+let students = JSON.parse(localStorage.getItem("students") || "[]");
 
-// DOM refs
+// ===============================
+// DOM references
+// ===============================
 const studentIdInput = document.getElementById("studentId");
 const studentNameInput = document.getElementById("studentName");
 const fatherNameInput = document.getElementById("fatherName");
 const dobInput = document.getElementById("dob");
 const addressInput = document.getElementById("address");
 
-const card = document.getElementById("printCard");
+const saveBtn = document.getElementById("saveBtn");
+
+const printCard = document.getElementById("printCard");
 const cardId = document.getElementById("cardId");
 const cardName = document.getElementById("cardName");
 const cardFather = document.getElementById("cardFather");
@@ -15,107 +22,119 @@ const cardDob = document.getElementById("cardDob");
 const cardAddress = document.getElementById("cardAddress");
 const qrBox = document.getElementById("qr");
 
-const saveBtn = document.getElementById("saveBtn");
-
-// read URL param
-const params = new URLSearchParams(location.search);
+// ===============================
+// Read URL parameter
+// ===============================
+const params = new URLSearchParams(window.location.search);
 const existingId = params.get("id");
 
 let currentStudent = null;
 
-/* ===============================
-   EXISTING STUDENT (REPRINT MODE)
-================================ */
+// ===============================
+// REPRINT MODE
+// ===============================
 if (existingId) {
   currentStudent = students.find(s => s.id === existingId);
 
   if (!currentStudent) {
     alert("Student not found");
-    location.href = "student_list.html";
+    window.location.href = "student_list.html";
   }
 
-  // fill inputs
+  // Fill inputs
   studentIdInput.value = currentStudent.id;
-  studentNameInput.value = currentStudent.name;
-  fatherNameInput.value = currentStudent.father;
-  dobInput.value = currentStudent.dob;
-  addressInput.value = currentStudent.address;
+  studentNameInput.value = currentStudent.name || "";
+  fatherNameInput.value = currentStudent.father || "";
+  dobInput.value = currentStudent.dob || "";
+  addressInput.value = currentStudent.address || "";
 
-  // lock ID
+  // Disable editing
   studentIdInput.readOnly = true;
+  studentNameInput.readOnly = true;
+  fatherNameInput.readOnly = true;
+  dobInput.readOnly = true;
+  addressInput.readOnly = true;
 
-  // show card
-  showCard(currentStudent);
+  studentNameInput.classList.add("readonly");
+  fatherNameInput.classList.add("readonly");
+  dobInput.classList.add("readonly");
+  addressInput.classList.add("readonly");
 
-  // change button text
-  saveBtn.innerText = "Update Student";
+  saveBtn.innerText = "Reprint ID Card";
 
+  // Show card immediately
+  renderCard(currentStudent);
 }
-/* ===============================
-   NEW STUDENT MODE
-================================ */
-else {
+
+// ===============================
+// NEW STUDENT MODE
+// ===============================
+if (!existingId) {
   const next = students.length + 1;
-  const sid = "STU" + String(next).padStart(4, "0");
-  studentIdInput.value = sid;
+  studentIdInput.value = "STU" + String(next).padStart(4, "0");
+  studentIdInput.readOnly = true;
 }
 
-/* ===============================
-   SAVE / UPDATE
-================================ */
+// ===============================
+// SAVE / REPRINT HANDLER
+// ===============================
 saveBtn.addEventListener("click", () => {
 
+  // REPRINT ONLY
   if (existingId) {
-    // UPDATE EXISTING
-    currentStudent.name = studentNameInput.value.trim();
-    currentStudent.father = fatherNameInput.value.trim();
-    currentStudent.dob = dobInput.value;
-    currentStudent.address = addressInput.value.trim();
-
-    localStorage.setItem("students", JSON.stringify(students));
-    showCard(currentStudent);
-    alert("Student updated");
-
-  } else {
-    // SAVE NEW
-    const student = {
-      id: studentIdInput.value,
-      name: studentNameInput.value.trim(),
-      father: fatherNameInput.value.trim(),
-      dob: dobInput.value,
-      address: addressInput.value.trim()
-    };
-
-    students.push(student);
-    localStorage.setItem("students", JSON.stringify(students));
-    showCard(student);
-    alert("Student saved & QR generated");
+    renderCard(currentStudent);
+    window.print();
+    return;
   }
+
+  // NEW STUDENT SAVE
+  const student = {
+    id: studentIdInput.value,
+    name: studentNameInput.value.trim(),
+    father: fatherNameInput.value.trim(),
+    dob: dobInput.value,
+    address: addressInput.value.trim()
+  };
+
+  if (!student.name) {
+    alert("Student name required");
+    studentNameInput.focus();
+    return;
+  }
+
+  students.push(student);
+  localStorage.setItem("students", JSON.stringify(students));
+
+  renderCard(student);
+  alert("Student saved & ID card generated");
 });
 
-/* ===============================
-   SHOW PVC CARD
-================================ */
-function showCard(student) {
-  card.style.display = "block";
+// ===============================
+// Render PVC Card
+// ===============================
+function renderCard(s) {
+  printCard.style.display = "block";
 
-  cardId.innerText = student.id;
-  cardName.innerText = student.name;
-  cardFather.innerText = student.father;
-  cardDob.innerText = student.dob;
-  cardAddress.innerText = student.address;
+  cardId.innerText = s.id;
+  cardName.innerText = s.name;
+  cardFather.innerText = s.father;
+  cardDob.innerText = s.dob;
+  cardAddress.innerText = s.address;
 
   qrBox.innerHTML = "";
   new QRCode(qrBox, {
-    text: student.id,
-    width: 90,
-    height: 90
+    text: s.id,
+    width: 100,
+    height: 100
   });
 }
 
+// ===============================
+// Print PVC Card
+// ===============================
 function printPVC() {
-  if (card.style.display === "none") {
-    alert("No card to print");
+  if (printCard.style.display === "none") {
+    alert("No ID card to print");
     return;
   }
   window.print();
