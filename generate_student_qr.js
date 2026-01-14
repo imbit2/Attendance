@@ -1,55 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Generate Student QR</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-</head>
-<body>
+const students = JSON.parse(localStorage.getItem("students") || "[]");
 
-<h2>Generate Student QR</h2>
+// DOM references (SAFE)
+const studentIdInput = document.getElementById("studentId");
+const studentNameInput = document.getElementById("studentName");
+const fatherNameInput = document.getElementById("fatherName");
+const dobInput = document.getElementById("dob");
+const addressInput = document.getElementById("address");
 
-<div class="card">
-  <label>Student ID</label>
-  <input id="studentId" readonly>
+const card = document.getElementById("printCard");
+const cardId = document.getElementById("cardId");
+const cardName = document.getElementById("cardName");
+const cardFather = document.getElementById("cardFather");
+const cardDob = document.getElementById("cardDob");
+const cardAddress = document.getElementById("cardAddress");
+const qrBox = document.getElementById("qr");
 
-  <label>Student Name</label>
-  <input id="studentName">
+// Generate ID
+const next = students.length + 1;
+const sid = "STU" + String(next).padStart(4, "0");
+studentIdInput.value = sid;
 
-  <label>Father's Name</label>
-  <input id="fatherName">
+// SAVE BUTTON (FIXED)
+document.getElementById("saveBtn").addEventListener("click", () => {
 
-  <label>DOB</label>
-  <input type="date" id="dob">
+  const student = {
+    id: sid,
+    name: studentNameInput.value.trim(),
+    father: fatherNameInput.value.trim(),
+    dob: dobInput.value,
+    address: addressInput.value.trim()
+  };
 
-  <label>Address</label>
-  <input id="address">
-</div>
+  students.push(student);
+  localStorage.setItem("students", JSON.stringify(students));
 
-<!-- PVC CARD -->
-<div class="pvc-card" id="printCard" style="display:none;">
-  <div class="card-header">
-    <div class="school-name">ABC COACHING CENTRE</div>
-    <div class="card-title">STUDENT ID CARD</div>
-  </div>
+  // Fill PVC card
+  card.style.display = "block";
+  cardId.innerText = student.id;
+  cardName.innerText = student.name;
+  cardFather.innerText = student.father;
+  cardDob.innerText = student.dob;
+  cardAddress.innerText = student.address;
 
-  <div class="card-body">
-    <div class="student-info">
-      <div><b>ID:</b> <span id="cardId"></span></div>
-      <div><b>Name:</b> <span id="cardName"></span></div>
-      <div><b>Father:</b> <span id="cardFather"></span></div>
-      <div><b>DOB:</b> <span id="cardDob"></span></div>
-      <div><b>Address:</b> <span id="cardAddress"></span></div>
-    </div>
-    <div class="qr-area" id="qr"></div>
-  </div>
+  // Generate QR AFTER SAVE
+  qrBox.innerHTML = "";
+  new QRCode(qrBox, {
+    text: student.id,
+    width: 90,
+    height: 90
+  });
 
-  <div class="card-footer">Valid for Academic Use Only</div>
-</div>
+  alert("Student saved & QR generated");
+});
 
-<button id="saveBtn">Save Student</button>
-<button onclick="printPVC()">Print PVC Card</button>
-
-<script src="generate_student_qr.js"></script>
-</body>
-</html>
+function printPVC() {
+  if (card.style.display === "none") {
+    alert("Please save student first");
+    return;
+  }
+  window.print();
+}
