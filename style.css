@@ -180,11 +180,11 @@ tr:last-child td {
   display: block;
 }
 
-.qr-container img,
+/*.qr-container img,
 .qr img {
   display: block;
   margin: 0 auto;
-}
+}*/
 
 /* =========================
    SEARCH BAR (STUDENT LIST)
@@ -288,6 +288,7 @@ tr:last-child td {
     padding: 14px;
   }
 }
+
 
 
 
