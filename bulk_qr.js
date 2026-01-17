@@ -27,6 +27,7 @@ function generateBulk() {
     idDiv.innerText = studentId;
 
     const qrDiv = document.createElement("div");
+    qrDiv.className = "qr-wrap";
 
     box.appendChild(idDiv);
     box.appendChild(qrDiv);
@@ -34,8 +35,8 @@ function generateBulk() {
 
     new QRCode(qrDiv, {
       text: studentId,
-      width: 80,
-      height: 108
+      width: 76,   // ≈ 2cm
+      height: 102  // ≈ 2.7cm
     });
   }
 
@@ -53,36 +54,54 @@ async function exportPDF() {
 
   const boxes = document.querySelectorAll(".qr-box");
 
-  let x = 10;
-  let y = 10;
+  /* A4 SAFE SETTINGS */
+  const startX = 10;
+  const startY = 10;
+  const boxW = 30;   // cut box width
+  const boxH = 40;   // cut box height
+  const qrW = 24;
+  const qrH = 32;
+  const gapX = 6;
+  const gapY = 8;
+  const cols = 5;
+
+  let x = startX;
+  let y = startY;
   let col = 0;
 
   for (let i = 0; i < boxes.length; i++) {
-    const canvas = await html2canvas(boxes[i], { scale: 2 });
+    const canvas = await html2canvas(boxes[i], {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    });
+
     const img = canvas.toDataURL("image/png");
 
     /* CUT BORDER */
     pdf.setDrawColor(0);
     pdf.setLineWidth(0.2);
-    pdf.rect(x, y, 24, 32);
+    pdf.rect(x, y, boxW, boxH);
 
-    /* QR INSIDE BORDER */
-    pdf.addImage(img, "PNG", x + 2, y + 2, 20, 28);
+    /* CENTER QR IMAGE */
+    const imgX = x + (boxW - qrW) / 2;
+    const imgY = y + (boxH - qrH) / 2;
+
+    pdf.addImage(img, "PNG", imgX, imgY, qrW, qrH);
 
     col++;
-    x += 28;
+    x += boxW + gapX;
 
-    if (col === 7) {
+    if (col === cols) {
       col = 0;
-      x = 10;
-      y += 36;
+      x = startX;
+      y += boxH + gapY;
 
-      if (y > 260) {
+      if (y + boxH > 287) {
         pdf.addPage();
-        y = 10;
+        y = startY;
       }
     }
   }
 
-  pdf.save("PTC_QR_with_Cut_Borders.pdf");
+  pdf.save("PTC_QR_A4_Print_Aligned.pdf");
 }
