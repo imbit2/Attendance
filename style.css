@@ -1,238 +1,213 @@
-/* ===============================
-   GLOBAL (MOBILE FIRST)
-================================ */
+/* =========================
+   GLOBAL RESET & BASE
+========================= */
 * {
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0;
-  padding: 12px;
-  background: #f4f6f8;
-  color: #222;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f2f5f9;
+  color: #333;
 }
 
-/* ===============================
-   PAGE TITLE
-================================ */
-.page-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  margin: 16px 0 20px;
-}
-
-/* ===============================
-   CONTAINER
-================================ */
+/* =========================
+   PAGE CONTAINER
+========================= */
 .page-container {
-  max-width: 100%;
+  max-width: 480px;
   margin: auto;
+  padding: 16px;
 }
 
-/* ===============================
-   FORM FIELDS
-================================ */
+/* =========================
+   HEADINGS
+========================= */
+.page-title,
+h1, h2, h3 {
+  text-align: center;
+  margin: 12px 0 18px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* =========================
+   LABELS & INPUTS
+========================= */
+.input-label,
 label {
   display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
   font-weight: 600;
+  margin-bottom: 6px;
+  color: #2c3e50;
 }
 
+.input-field,
 input,
 select,
 textarea {
   width: 100%;
-  padding: 12px;
+  padding: 14px 16px;
   font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid #dcdfe6;
+  margin-bottom: 14px;
+  background: #fff;
 }
 
-/* ===============================
-   BUTTONS (ALL SAME COLOR)
-================================ */
-button,
-.btn {
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.primary-btn,
+button {
   width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
+  padding: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 14px;
   border: none;
   background: #3498db;
   color: #fff;
-  margin-top: 10px;
+  cursor: pointer;
+  margin-bottom: 12px;
 }
 
+.primary-btn:active,
 button:active {
   transform: scale(0.98);
 }
 
-/* ===============================
-   TOP MENU (MAIN PAGE)
-================================ */
-.menu {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.secondary-btn {
+  background: #95a5a6;
 }
 
-.menu a {
-  flex: 1 1 48%;
-  text-align: center;
-  padding: 12px;
-  background: #3498db;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 14px;
+.danger-btn {
+  background: #e74c3c;
 }
 
-/* ===============================
-   QR PAGE WRAPPER
-================================ */
-.qr-page {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* ===============================
-   PVC ID CARD
-================================ */
-.id-card {
-  width: 100%;
-  max-width: 340px;
-  margin: 20px auto;
-  padding: 16px;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-  color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-}
-
-.id-card h3 {
-  margin: 0 0 6px;
-  font-size: 16px;
-  text-align: center;
-}
-
-.id-card p {
-  margin: 4px 0;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-/* ===============================
-   QR IMAGE
-================================ */
-.qr-box {
-  margin-top: 12px;
-  text-align: center;
-}
-
-.qr-box img {
-  width: 90px;
-  height: 90px;
+/* =========================
+   CARD / BOX UI
+========================= */
+.card,
+.box,
+.section {
   background: #fff;
-  padding: 4px;
-  border-radius: 6px;
-}
-
-/* ===============================
-   STUDENT LIST
-================================ */
-.student-item {
-  background: #fff;
+  border-radius: 16px;
   padding: 14px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 14px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
-.student-item a {
-  text-decoration: none;
-  color: #3498db;
-  font-weight: 600;
-}
-
-/* ===============================
-   TABLE (MOBILE SAFE)
-================================ */
+/* =========================
+   TABLE (STUDENT LIST / ATTENDANCE)
+========================= */
 table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
   font-size: 14px;
 }
 
 th, td {
   padding: 10px;
+  text-align: center;
   border-bottom: 1px solid #eee;
-  text-align: left;
 }
 
-/* ===============================
-   PRINT PVC
-================================ */
-@media print {
-  body {
-    background: #fff;
-    padding: 0;
-  }
-
-  button,
-  .menu,
-  .page-title {
-    display: none;
-  }
-
-  .id-card {
-    box-shadow: none;
-    page-break-inside: avoid;
-  }
-}
-
-/* ===============================
-   DESKTOP (ONLY ENHANCEMENT)
-================================ */
-@media (min-width: 768px) {
-  .page-container {
-    max-width: 700px;
-  }
-
-  .menu a {
-    flex: 1 1 30%;
-  }
-}
-/* ===============================
-   MOBILE APP–LIKE BUTTONS
-================================ */
-
-button,
-.btn {
-  min-height: 56px;          /* App standard (Android / iOS) */
-  font-size: 18px;           /* Bigger text */
+th {
+  background: #3498db;
+  color: #fff;
   font-weight: 600;
-  border-radius: 14px;       /* Softer corners */
-  padding: 16px 18px;
-  letter-spacing: 0.3px;
 }
 
-/* Optional: pressed feel */
-button:active {
-  transform: scale(0.97);
+tr:last-child td {
+  border-bottom: none;
 }
 
-/* Optional: space between stacked buttons */
-button + button {
-  margin-top: 14px;
+/* =========================
+   QR GRID (BULK QR)
+========================= */
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
 }
 
+.qr-box {
+  background: #fff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
+.qr-id {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
 
+/* QR preview size (screen only) */
+.qr-box canvas,
+.qr-box img {
+  width: 76px !important;   /* ≈ 2cm */
+  height: 102px !important; /* ≈ 2.7cm */
+}
 
+/* =========================
+   SEARCH BAR (STUDENT LIST)
+========================= */
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.search-bar input {
+  flex: 1;
+}
+
+.search-bar button {
+  width: auto;
+  padding: 14px 18px;
+}
+
+/* =========================
+   STATUS TEXT
+========================= */
+.success-text {
+  color: #27ae60;
+  font-weight: 600;
+  text-align: center;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* =========================
+   MOBILE SAFE AREA
+========================= */
+@media (max-width: 360px) {
+  .page-container {
+    padding: 12px;
+  }
+
+  .primary-btn,
+  button {
+    font-size: 16px;
+    padding: 14px;
+  }
+}
