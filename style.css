@@ -229,7 +229,7 @@ tr:last-child td {
 
 /* Icon buttons */
 .icon-btn {
-  min-width: 50px;
+  max-width: 50px;
   height: 50px;
   background: #3498db;
   color: #fff;
@@ -266,6 +266,7 @@ tr:last-child td {
     padding: 14px;
   }
 }
+
 
 
 
