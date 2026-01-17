@@ -98,7 +98,7 @@ button:active {
 .qr-page {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 /* ===============================
@@ -232,6 +232,7 @@ button:active {
 button + button {
   margin-top: 14px;
 }
+
 
 
 
