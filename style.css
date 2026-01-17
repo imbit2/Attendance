@@ -10,7 +10,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background: #f2f5f9;
   color: #333;
-}
+} 
 
 /* =========================
    PAGE CONTAINER
@@ -263,5 +263,6 @@ tr:last-child td {
     padding: 14px;
   }
 }
+
 
 
