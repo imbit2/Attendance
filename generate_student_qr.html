@@ -1,110 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Generate Student QR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- MAIN CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- QR CODE LIBRARY -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-  <div class="page-container qr-page">
-    <h2 class="page-title">Generate Student QR</h2>
+<div class="page-container">
+  <h2 class="page-title">Generate Student QR</h2>
 
-    <!-- STUDENT FORM -->
-    <label>Student ID</label>
-    <input type="text" id="studentId" readonly>
+  <label>Student ID</label>
+  <input type="text" id="studentId" readonly>
 
-    <label>Student Name</label>
-    <input type="text" id="studentName" placeholder="Enter student name">
+  <label>Student Name</label>
+  <input type="text" id="studentName">
 
-    <label>Father's Name</label>
-    <input type="text" id="fatherName" placeholder="Enter father's name">
+  <label>Father's Name</label>
+  <input type="text" id="fatherName">
 
-    <label>Date of Birth</label>
-    <input type="date" id="dob">
+  <label>DOB</label>
+  <input type="date" id="dob">
 
-    <label>Address</label>
-    <textarea id="address" placeholder="Enter address"></textarea>
+  <label>Address</label>
+  <textarea id="address"></textarea>
 
-    <button onclick="saveStudent()">Save Student</button>
+  <button onclick="saveStudent()">Save Student</button>
 
-    <!-- PVC ID CARD -->
-    <div class="id-card" id="idCard" style="display:none;">
-      <h3>STUDENT ID CARD</h3>
+  <p id="saveMsg" style="display:none; color:green; text-align:center; margin-top:10px;">
+    Student is saved, now you can generate ID card
+  </p>
 
-      <div class="details">
-        <p><strong>ID:</strong> <span id="cardId"></span></p>
-        <p><strong>Name:</strong> <span id="cardName"></span></p>
-        <p><strong>Father:</strong> <span id="cardFather"></span></p>
-        <p><strong>DOB:</strong> <span id="cardDob"></span></p>
-        <p><strong>Address:</strong> <span id="cardAddress"></span></p>
-      </div>
+  <button id="generateBtn" style="display:none;"
+          onclick="goToIdCard()">
+    Generate ID Card
+  </button>
+</div>
 
-      <div class="qr-box">
-        <div id="qrCode"></div>
-      </div>
-    </div>
-
-    <button onclick="window.print()" style="display:none;" id="printBtn">
-      Print ID Card
-    </button>
-
-  </div>
-
-<script>
-/* ==========================
-   AUTO GENERATE STUDENT ID
-========================== */
-function generateStudentId() {
-  let students = JSON.parse(localStorage.getItem("students") || "[]");
-  let next = students.length + 1;
-  return "STU" + String(next).padStart(4, "0");
-}
-
-document.getElementById("studentId").value = generateStudentId();
-
-/* ==========================
-   SAVE STUDENT & GENERATE QR
-========================== */
-function saveStudent() {
-  const id = document.getElementById("studentId").value;
-  const name = document.getElementById("studentName").value;
-  const father = document.getElementById("fatherName").value;
-  const dob = document.getElementById("dob").value;
-  const address = document.getElementById("address").value;
-
-  const student = { id, name, father, dob, address };
-
-  let students = JSON.parse(localStorage.getItem("students") || "[]");
-  students.push(student);
-  localStorage.setItem("students", JSON.stringify(students));
-
-  // Fill PVC card
-  document.getElementById("cardId").innerText = id;
-  document.getElementById("cardName").innerText = name;
-  document.getElementById("cardFather").innerText = father;
-  document.getElementById("cardDob").innerText = dob;
-  document.getElementById("cardAddress").innerText = address;
-
-  // Generate QR
-  document.getElementById("qrCode").innerHTML = "";
-  new QRCode(document.getElementById("qrCode"), {
-    text: id,
-    width: 90,
-    height: 90
-  });
-
-  document.getElementById("idCard").style.display = "block";
-  document.getElementById("printBtn").style.display = "block";
-}
-</script>
-
+<script src="generate_student_qr.js"></script>
 </body>
 </html>
-
