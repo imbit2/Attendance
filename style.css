@@ -1,95 +1,71 @@
 /* ===============================
-   RESET & BASE
+   GLOBAL (MOBILE FIRST)
 ================================ */
-
 * {
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 12px;
   background: #f4f6f8;
   color: #222;
 }
 
 /* ===============================
-   MAIN PAGE CONTAINER
-   (Use on ALL pages)
+   PAGE TITLE
 ================================ */
-
-.page-container {
-  max-width: 720px;
-  margin: auto;
-  padding: 16px;
-}
-
-/* Page heading */
 .page-title {
-   text-align: center;
+  text-align: center;
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 18px;
+  margin: 16px 0 20px;
 }
 
 /* ===============================
-   FORM STYLING
+   CONTAINER
 ================================ */
+.container {
+  max-width: 100%;
+  margin: auto;
+}
 
+/* ===============================
+   FORM FIELDS
+================================ */
 label {
-  font-weight: 500;
   display: block;
+  font-size: 14px;
   margin-bottom: 6px;
+  font-weight: 600;
 }
 
 input,
-textarea,
-select {
+select,
+textarea {
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  margin-bottom: 14px;
-  background: #fff;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-/* Disable editing (Reprint mode) */
-input[disabled],
-textarea[disabled] {
-  background: #eee;
-  color: #666;
+  margin-bottom: 16px;
 }
 
 /* ===============================
-   BUTTONS (GLOBAL)
+   BUTTONS (ALL SAME COLOR)
 ================================ */
-
-button {
+button,
+.btn {
   width: 100%;
   padding: 14px;
   font-size: 16px;
-  border-radius: 10px;
+  font-weight: 600;
+  border-radius: 8px;
   border: none;
   background: #3498db;
-  color: white;
-  cursor: pointer;
+  color: #fff;
   margin-top: 10px;
-}
-
-button.secondary {
-  background: #2ecc71;
-}
-
-button.danger {
-  background: #e74c3c;
 }
 
 button:active {
@@ -97,94 +73,139 @@ button:active {
 }
 
 /* ===============================
+   TOP MENU (MAIN PAGE)
+================================ */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.menu a {
+  flex: 1 1 48%;
+  text-align: center;
+  padding: 12px;
+  background: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* ===============================
+   QR PAGE WRAPPER
+================================ */
+.qr-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===============================
    PVC ID CARD
 ================================ */
-
 .id-card {
   width: 100%;
-  max-width: 320px;
-  height: 200px;
-  background: linear-gradient(135deg, #4a7ecb, #5c91d6);
+  max-width: 340px;
+  margin: 20px auto;
+  padding: 16px;
+  background: linear-gradient(135deg, #4a90e2, #357abd);
   color: #fff;
   border-radius: 12px;
-  padding: 14px;
-  margin: 20px auto;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  position: relative;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
 
-/* STUDENT DETAILS TEXT SIZE (CHANGE HERE 👇) */
-.id-card .details {
-  font-size: 14px;     /* ⬅ increase / decrease this */
-  line-height: 1.35;
+.id-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  text-align: center;
 }
 
-.id-card .details strong {
+.id-card p {
+  margin: 4px 0;
+  font-size: 15px;
   font-weight: 600;
 }
 
-/* QR CODE POSITION */
-.id-card .qr {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
+/* ===============================
+   QR IMAGE
+================================ */
+.qr-box {
+  margin-top: 12px;
+  text-align: center;
 }
 
-.id-card .qr img {
-  width: 70px;
-  height: 70px;
-  background: white;
+.qr-box img {
+  width: 90px;
+  height: 90px;
+  background: #fff;
   padding: 4px;
   border-radius: 6px;
 }
 
 /* ===============================
-   TABLES (Student List etc.)
+   STUDENT LIST
 ================================ */
+.student-item {
+  background: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
 
+.student-item a {
+  text-decoration: none;
+  color: #3498db;
+  font-weight: 600;
+}
+
+/* ===============================
+   TABLE (MOBILE SAFE)
+================================ */
 table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
+  font-size: 14px;
 }
 
-th,
-td {
+th, td {
   padding: 10px;
-  text-align: left;
   border-bottom: 1px solid #eee;
-}
-
-th {
-  background: #3498db;
-  color: #fff;
-  font-weight: 500;
+  text-align: left;
 }
 
 /* ===============================
-   MOBILE OPTIMIZATION
+   PRINT PVC
 ================================ */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
 
-@media (max-width: 600px) {
-
+  button,
+  .menu,
   .page-title {
-    font-size: 20px;
+    display: none;
   }
 
   .id-card {
-    max-width: 300px;
-    height: 190px;
-  }
-
-  .id-card .details {
-    font-size: 13px;
-  }
-
-  .id-card .qr img {
-    width: 64px;
-    height: 64px;
+    box-shadow: none;
+    page-break-inside: avoid;
   }
 }
 
+/* ===============================
+   DESKTOP (ONLY ENHANCEMENT)
+================================ */
+@media (min-width: 768px) {
+  .container {
+    max-width: 700px;
+  }
+
+  .menu a {
+    flex: 1 1 30%;
+  }
+}
