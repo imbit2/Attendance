@@ -15,28 +15,21 @@
 
   <h2 class="page-title">Student List</h2>
 
-  <!-- Generate Bulk QR -->
-  <a href="bulk_qr.html" class="primary-btn">
-    Generate Bulk QR
-  </a>
+  <div class="student-controls">
+  <button class="bulk-qr-btn">Generate Bulk QR</button>
 
-  <!-- Search Bar -->
-  <div class="search-bar">
+  <div class="search-wrapper">
     <input
       type="text"
       id="searchInput"
-      class="input-field"
       placeholder="Search by Student ID or Name"
-    >
+    />
 
-    <button onclick="searchStudent()" title="Search">
-      🔍
-    </button>
-
-    <button onclick="clearSearch()" title="Clear">
-      ❌
-    </button>
+    <button class="icon-btn" onclick="searchStudent()">🔍</button>
+    <button class="icon-btn" onclick="clearSearch()">❌</button>
   </div>
+</div>
+
 
   <!-- Student Table -->
   <div class="card">
@@ -58,3 +51,4 @@
 
 </body>
 </html>
+
