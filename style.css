@@ -197,7 +197,7 @@ tr:last-child td {
   text-align: center;
 }
 
-/* ===== Generate Bulk QR Button ===== */
+/* ===== Bulk QR Button ===== */
 .bulk-qr-btn {
   width: 100%;
   background: #3498db;
@@ -211,8 +211,10 @@ tr:last-child td {
 /* ===== Search Row ===== */
 .search-row {
   display: flex;
+  align-items: center;
   gap: 10px;
   margin-bottom: 18px;
+  width: 100%;
 }
 
 /* Search input */
@@ -222,11 +224,12 @@ tr:last-child td {
   font-size: 16px;
   border-radius: 14px;
   border: 1px solid #ddd;
+  min-width: 0; /* VERY IMPORTANT for mobile */
 }
 
 /* Icon buttons */
 .icon-btn {
-  width: 50px;
+  min-width: 50px;
   height: 50px;
   background: #3498db;
   color: #fff;
@@ -263,6 +266,7 @@ tr:last-child td {
     padding: 14px;
   }
 }
+
 
 
 
