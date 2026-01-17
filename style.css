@@ -26,6 +26,7 @@ body {
 
 /* Page heading */
 .page-title {
+   text-align: center;
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 18px;
@@ -186,3 +187,4 @@ th {
     height: 64px;
   }
 }
+
