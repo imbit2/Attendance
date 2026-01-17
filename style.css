@@ -26,7 +26,7 @@ body {
 /* ===============================
    CONTAINER
 ================================ */
-.container {
+.page-container {
   max-width: 100%;
   margin: auto;
 }
@@ -201,7 +201,7 @@ th, td {
    DESKTOP (ONLY ENHANCEMENT)
 ================================ */
 @media (min-width: 768px) {
-  .container {
+  .page-container {
     max-width: 700px;
   }
 
@@ -209,3 +209,4 @@ th, td {
     flex: 1 1 30%;
   }
 }
+
