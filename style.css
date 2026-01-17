@@ -197,6 +197,65 @@ tr:last-child td {
   text-align: center;
 }
 
+/* ===== Student List Top Controls ===== */
+
+.student-controls {
+  display: flex;
+  flex-wrap: wrap;           /* ✅ allow wrapping */
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* Generate Bulk QR button */
+.bulk-qr-btn {
+  width: 100%;
+  font-size: 16px;
+  padding: 14px;
+}
+
+/* Search wrapper */
+.search-wrapper {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+/* Search input */
+.search-wrapper input {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+/* Icon buttons */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Desktop Enhancement ===== */
+@media (min-width: 768px) {
+  .student-controls {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .bulk-qr-btn {
+    width: auto;
+  }
+
+  .search-wrapper {
+    width: auto;
+    flex: 1;
+  }
+}
+
 /* =========================
    MOBILE SAFE AREA
 ========================= */
@@ -211,3 +270,4 @@ tr:last-child td {
     padding: 14px;
   }
 }
+
