@@ -35,10 +35,11 @@ function generateBulk() {
     qrGrid.appendChild(box);
 
     new QRCode(qrDiv, {
-      text: studentId,
-      width: 80,
-      height: 108
-    });
+  text: studentId,
+  width: 76,
+  height: 76,
+  correctLevel: QRCode.CorrectLevel.H
+  });
   }
 
   localStorage.setItem("lastPTCId", last + count);
@@ -66,3 +67,4 @@ async function exportPNG() {
   link.click();
   document.body.removeChild(link);
 }
+
