@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="profile-container">
+
+  <div class="profile-header">
+    <h2>PTC Coaching Center</h2>
+  </div>
+
+  <div class="profile-body">
+    <div class="student-details">
+      <p><strong>ID:</strong> <span id="pId"></span></p>
+      <p><strong>Name:</strong> <span id="pName"></span></p>
+      <p><strong>Guardian:</strong> <span id="pGuardian"></span></p>
+      <p><strong>DOB:</strong> <span id="pDob"></span></p>
+      <p><strong>Belt:</strong> <span id="pBelt"></span></p>
+      <p><strong>Address:</strong> <span id="pAddress"></span></p>
+      <p><strong>Phone:</strong> <span id="pPhone"></span></p>
+    </div>
+
+    <div class="profile-qr">
+      <div id="qrBox"></div>
+      <div class="qr-id" id="qrText"></div>
+    </div>
+  </div>
+
+  <div class="profile-footer">
+    <button onclick="window.close()">Close</button>
+  </div>
+
+</div>
+
+<script src="qrcode.min.js"></script>
+<script src="student_profile.js"></script>
+</body>
+</html>
