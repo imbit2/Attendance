@@ -2,9 +2,8 @@ let generatedIds = [];
 
 function generateBulk() {
   const count = parseInt(document.getElementById("qrCount").value);
-
-  if (!count || count <= 0) {
-    alert("Please select how many QR codes to generate");
+  if (!count) {
+    alert("Please select quantity");
     return;
   }
 
@@ -18,40 +17,27 @@ function generateBulk() {
   for (let i = 1; i <= count; i++) {
     const num = last + i;
     const studentId = "PTC" + String(num).padStart(4, "0");
+
     generatedIds.push(studentId);
 
-    /* QR BOX */
     const box = document.createElement("div");
     box.className = "qr-box";
 
-    /* TABLE */
-    const table = document.createElement("table");
-    table.className = "qr-table";
+    const idDiv = document.createElement("div");
+    idDiv.className = "qr-id";
+    idDiv.innerText = studentId;
 
-    /* ROW 1: STUDENT ID */
-    const row1 = document.createElement("tr");
-    const idCell = document.createElement("td");
-    idCell.className = "qr-id";
-    idCell.innerText = studentId;
-    row1.appendChild(idCell);
+    const qrDiv = document.createElement("div");
+    qrDiv.className = "qr-container";
 
-    /* ROW 2: QR CODE */
-    const row2 = document.createElement("tr");
-    const qrCell = document.createElement("td");
-    qrCell.className = "qr-cell";
-    row2.appendChild(qrCell);
-
-    table.appendChild(row1);
-    table.appendChild(row2);
-    box.appendChild(table);
+    box.appendChild(idDiv);
+    box.appendChild(qrDiv);
     qrGrid.appendChild(box);
 
-    /* GENERATE QR */
-    new QRCode(qrCell, {
+    new QRCode(qrDiv, {
       text: studentId,
       width: 80,
-      height: 80,
-      correctLevel: QRCode.CorrectLevel.H
+      height: 108
     });
   }
 
@@ -59,57 +45,28 @@ function generateBulk() {
 }
 
 /* =========================
-   EXPORT PDF (A4 – CUT SAFE)
+   EXPORT CSV
 ========================= */
-async function exportPDF() {
+function exportCSV() {
   if (generatedIds.length === 0) {
     alert("Generate QR codes first");
     return;
   }
 
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "mm", "a4");
+  let csv = "Student ID,QR Value,Generated On\n";
+  const now = new Date().toLocaleString();
 
-  const tables = document.querySelectorAll(".qr-box table");
+  generatedIds.forEach(id => {
+    csv += `${id},${id},${now}\n`;
+  });
 
-  const CARD_W = 20;   // 2cm
-  const CARD_H = 27;   // 2.7cm
-  const GAP_X = 4;
-  const GAP_Y = 5;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
 
-  let x = 10;
-  let y = 10;
-  let col = 0;
-
-  for (let i = 0; i < tables.length; i++) {
-    const canvas = await html2canvas(tables[i], {
-      scale: 4,
-      backgroundColor: "#ffffff"
-    });
-
-    const img = canvas.toDataURL("image/png");
-
-    /* CUT BORDER */
-    pdf.setLineWidth(0.2);
-    pdf.rect(x, y, CARD_W, CARD_H);
-
-    /* CENTER CONTENT PERFECTLY */
-    pdf.addImage(img, "PNG", x, y, CARD_W, CARD_H);
-
-    col++;
-    x += CARD_W + GAP_X;
-
-    if (col === 7) {
-      col = 0;
-      x = 10;
-      y += CARD_H + GAP_Y;
-
-      if (y + CARD_H > 287) {
-        pdf.addPage();
-        y = 10;
-      }
-    }
-  }
-
-  pdf.save("PTC_Bulk_QR_A4_Perfect.pdf");
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "PTC_Bulk_QR_List.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
