@@ -1,4 +1,54 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-container">
+
+  <!-- Page Title -->
+  <h2 class="page-title">Attendance Details</h2>
+
+  <!-- Date Selector -->
+  <label class="input-label">Select Date</label>
+  <input type="date" id="attendanceDate" class="input-field">
+
+  <!-- Export Button -->
+  <button class="primary-btn" onclick="exportExcel()">
+    Export to Excel
+  </button>
+
+  <!-- Attendance Table -->
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="attendanceTableBody">
+        <!-- Data loads here -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Page Script -->
+<script src="attendance_details.js"></script>
+
+</body>
+</html>
+
+<!--<!DOCTYPE html>
 <html>
 <head>
   <title>Attendance Details</title>
@@ -40,4 +90,5 @@ function load() {
 </div>
 </body>
 </html>
+
 
