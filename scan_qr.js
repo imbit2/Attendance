@@ -9,7 +9,7 @@ function startScan() {
 
   Html5Qrcode.getCameras().then(() => {
     html5Qr.start(
-      { facingMode: "user" }, // FRONT CAMERA (IMPORTANT)
+      { facingMode: "user" }, // FRONT CAMERA
       {
         fps: 10,
         qrbox: { width: 250, height: 250 }
@@ -22,11 +22,10 @@ function startScan() {
 function onScanSuccess(decodedText) {
   const now = Date.now();
 
-  // prevent duplicate fast scanning
+  // prevent very fast duplicate scans
   if (scannedRecently[decodedText] && now - scannedRecently[decodedText] < SCAN_COOLDOWN) {
     return;
   }
-
   scannedRecently[decodedText] = now;
 
   const students = JSON.parse(localStorage.getItem("students") || "[]");
@@ -38,19 +37,24 @@ function onScanSuccess(decodedText) {
     return;
   }
 
-  markAttendance(student.id);
-  speak("Attendance successful");
-  showStatus(`Present: ${student.id}`, true);
-}
-
-function markAttendance(studentId) {
   const today = new Date().toISOString().split("T")[0];
   let attendance = JSON.parse(localStorage.getItem("attendance") || "{}");
 
+  // if already marked today
+  if (attendance[today] && attendance[today][student.id] === "Present") {
+    speak("Attendance already done");
+    showStatus(`Already Present: ${student.id}`, false);
+    return;
+  }
+
+  // mark attendance
   if (!attendance[today]) attendance[today] = {};
-  attendance[today][studentId] = "Present";
+  attendance[today][student.id] = "Present";
 
   localStorage.setItem("attendance", JSON.stringify(attendance));
+
+  speak("Attendance successful");
+  showStatus(`Present: ${student.id}`, true);
 }
 
 function stopScan() {
