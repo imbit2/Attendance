@@ -301,27 +301,23 @@ tr:last-child td {
 /* =========================
    BULK QR – FIX ALIGNMENT (SCREEN + PDF)
 ========================= */
-
 .qr-box {
+  width: 2cm;
+  height: 2.7cm;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  page-break-inside: avoid;
 }
 
 .qr-id {
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 2px;
 }
 
-/* Lock QR size strictly */
-.qr-box canvas,
-.qr-box img {
-  width: 76px !important;   /* 2cm */
-  height: 102px !important;/* 2.7cm */
-  object-fit: contain;
+.qr-box canvas {
+  display: block;
 }
 
 /* =========================
@@ -362,3 +358,4 @@ tr:last-child td {
     vertical-align: middle;
   }
 }
+
