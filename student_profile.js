@@ -30,3 +30,22 @@ new QRCode(document.getElementById("qrBox"), {
   height: 100,
   correctLevel: QRCode.CorrectLevel.H
 });
+/* ===== Attendance History ===== */
+const attendance = JSON.parse(localStorage.getItem("attendance") || "{}");
+
+let historyHTML = "";
+let found = false;
+
+for (let date in attendance) {
+  if (attendance[date][student.id]) {
+    found = true;
+    historyHTML += `<p>${date} : ${attendance[date][student.id]}</p>`;
+  }
+}
+
+if (!found) {
+  historyHTML = "<p>No attendance record found</p>";
+}
+
+document.getElementById("attendanceHistory").innerHTML = historyHTML;
+
