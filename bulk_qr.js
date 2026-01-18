@@ -44,28 +44,24 @@ function generateBulk() {
   localStorage.setItem("lastPTCId", last + count);
 }
 
-/* =========================
-   EXPORT CSV
-========================= */
-function exportCSV() {
-  if (generatedIds.length === 0) {
+async function exportPNG() {
+  const qrGrid = document.getElementById("qrGrid");
+
+  if (!qrGrid || qrGrid.children.length === 0) {
     alert("Generate QR codes first");
     return;
   }
 
-  let csv = "Student ID,QR Value,Generated On\n";
-  const now = new Date().toLocaleString();
-
-  generatedIds.forEach(id => {
-    csv += `${id},${id},${now}\n`;
+  const canvas = await html2canvas(qrGrid, {
+    backgroundColor: "#ffffff",
+    scale: 3   // higher = sharper image
   });
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+  const imgData = canvas.toDataURL("image/png");
 
   const link = document.createElement("a");
-  link.href = url;
-  link.download = "PTC_Bulk_QR_List.csv";
+  link.href = imgData;
+  link.download = "PTC_Bulk_QR.png";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
