@@ -14,16 +14,20 @@ if (!student) {
 // fill fields
 document.getElementById("studentId").value = student.id;
 document.getElementById("studentName").value = student.name;
-document.getElementById("fatherName").value = student.father;
-document.getElementById("dob").value = student.dob;
-document.getElementById("address").value = student.address;
+document.getElementById("studentGuardian").value = student.guardian;
+document.getElementById("studentDob").value = student.dob;
+document.getElementById("studentAddress").value = student.address;
+document.getElementById("studentBelt").value = student.belt;
+document.getElementById("studentPhone").value = student.phone;
 
 // update student
 function updateStudent() {
   student.name = studentName.value.trim();
-  student.father = fatherName.value.trim();
-  student.dob = dob.value;
-  student.address = address.value.trim();
+  student.guardian = studentGaurdian.value.trim();
+  student.dob = studentDob.value;
+  student.address = studentAddress.value.trim();
+  student.belt = studentBelt.value.trim();
+  student.phone = studentPhone.value.trim();
 
   localStorage.setItem("students", JSON.stringify(students));
   alert("Student updated successfully");
@@ -49,3 +53,4 @@ function showHistory() {
 function reprintCard() {
   location.href = "generate_student_qr.html?id=" + student.id;
 }
+
