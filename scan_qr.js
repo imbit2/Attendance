@@ -1,24 +1,27 @@
 let scanner;
-let today = new Date().toISOString().split("T")[0];
+const today = new Date().toISOString().split("T")[0];
 
 function startScan() {
   const video = document.getElementById("qrVideo");
 
   scanner = new Instascan.Scanner({
     video: video,
-    mirror: true // FRONT CAMERA
+    mirror: true // FRONT camera
   });
 
   scanner.addListener("scan", handleScan);
 
   Instascan.Camera.getCameras().then(cameras => {
-    if (cameras.length > 0) {
-      // Try to use front camera
-      const frontCam = cameras.find(c => c.name.toLowerCase().includes("front"));
-      scanner.start(frontCam || cameras[0]);
-    } else {
+    if (cameras.length === 0) {
       alert("No camera found");
+      return;
     }
+
+    const frontCam = cameras.find(c =>
+      c.name.toLowerCase().includes("front")
+    );
+
+    scanner.start(frontCam || cameras[0]);
   });
 }
 
@@ -48,21 +51,20 @@ function handleScan(content) {
   const now = new Date();
   const timeStr = now.toTimeString().slice(0, 5); // HH:MM
 
-  // ❌ More than 2 scans
+  // ❌ Max 2 scans
   if (scans.length >= 2) {
     speak("Attendance already done");
     return;
   }
 
-  // ❌ Check 60 min gap for 2nd scan
+  // ❌ 60 min gap check
   if (scans.length === 1) {
     const [h, m] = scans[0].split(":").map(Number);
-    const firstTime = new Date();
-    firstTime.setHours(h, m, 0, 0);
+    const firstScan = new Date();
+    firstScan.setHours(h, m, 0, 0);
 
-    const diffMinutes = (now - firstTime) / 60000;
-
-    if (diffMinutes < 60) {
+    const diff = (now - firstScan) / 60000;
+    if (diff < 60) {
       speak("Scan after 60 minutes");
       return;
     }
@@ -75,7 +77,7 @@ function handleScan(content) {
   speak("Attendance successful");
 }
 
-/* 🔊 VOICE FEEDBACK */
+/* 🔊 Voice feedback */
 function speak(text) {
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = "en-IN";
