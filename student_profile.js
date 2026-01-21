@@ -23,6 +23,8 @@ document.getElementById("pBelt").innerText = student.belt || "-";
 document.getElementById("pPhone").innerText = student.phone || "-";
 document.getElementById("pAddress").innerText = student.address || "-";
 
+renderAttendanceHistory(student.id);
+
 /* Generate QR CODE (NOT TEXT) */
 new QRCode(document.getElementById("qrBox"), {
   text: student.id,
@@ -60,3 +62,4 @@ function renderAttendanceHistory(studentId) {
 
   historyDiv.innerHTML = html;
 }
+
