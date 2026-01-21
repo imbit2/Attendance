@@ -48,9 +48,9 @@ function renderAttendanceHistory(studentId) {
 
       html += `
         <div style="margin-bottom:8px;">
-          <strong>${date}</strong><br>
-          Status: ${record.status}<br>
-          In: ${record.inTime || "-"} &nbsp; | &nbsp; Out: ${record.outTime || "-"}
+          <strong>${date}</strong>
+          &nbsp; | &nbsp; ${record.status}
+          &nbsp; | &nbsp; In: ${record.inTime || "-"} &nbsp; | &nbsp; Out: ${record.outTime || "-"}
         </div>
       `;
     }
@@ -62,4 +62,5 @@ function renderAttendanceHistory(studentId) {
 
   historyDiv.innerHTML = html;
 }
+
 
