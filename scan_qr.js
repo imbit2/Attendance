@@ -1,80 +1,84 @@
-let html5Qr;
-let scannedRecently = {};
-const SCAN_COOLDOWN = 3000; // 3 seconds per ID
-
-document.addEventListener("DOMContentLoaded", startScan);
+let scanner;
+let today = new Date().toISOString().split("T")[0];
 
 function startScan() {
-  html5Qr = new Html5Qrcode("qr-reader");
+  const video = document.getElementById("qrVideo");
 
-  Html5Qrcode.getCameras().then(() => {
-    html5Qr.start(
-      { facingMode: "user" }, // FRONT CAMERA
-      {
-        fps: 10,
-        qrbox: { width: 250, height: 250 }
-      },
-      onScanSuccess
-    );
+  scanner = new Instascan.Scanner({
+    video: video,
+    mirror: true // FRONT CAMERA
+  });
+
+  scanner.addListener("scan", handleScan);
+
+  Instascan.Camera.getCameras().then(cameras => {
+    if (cameras.length > 0) {
+      // Try to use front camera
+      const frontCam = cameras.find(c => c.name.toLowerCase().includes("front"));
+      scanner.start(frontCam || cameras[0]);
+    } else {
+      alert("No camera found");
+    }
   });
 }
 
-function onScanSuccess(decodedText) {
-  const now = Date.now();
+function stopScan() {
+  if (scanner) scanner.stop();
+  window.close();
+}
 
-  // prevent very fast duplicate scans
-  if (scannedRecently[decodedText] && now - scannedRecently[decodedText] < SCAN_COOLDOWN) {
-    return;
-  }
-  scannedRecently[decodedText] = now;
+function handleScan(content) {
+  const students = JSON.parse(localStorage.getItem("students")) || [];
+  const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
 
-  const students = JSON.parse(localStorage.getItem("students") || "[]");
-  const student = students.find(s => s.id === decodedText);
+  const student = students.find(s => s.id === content);
 
   if (!student) {
     speak("Invalid ID");
-    showStatus("Invalid ID", false);
     return;
   }
 
-  const today = new Date().toISOString().split("T")[0];
-  let attendance = JSON.parse(localStorage.getItem("attendance") || "{}");
-
-  // if already marked today
-  if (attendance[today] && attendance[today][student.id] === "Present") {
-    speak("Attendance already done");
-    showStatus(`Already Present: ${student.id}`, false);
-    return;
-  }
-
-  // mark attendance
   if (!attendance[today]) attendance[today] = {};
-  attendance[today][student.id] = "Present";
+  if (!attendance[today][student.id]) {
+    attendance[today][student.id] = { scans: [] };
+  }
 
+  const scans = attendance[today][student.id].scans;
+
+  const now = new Date();
+  const timeStr = now.toTimeString().slice(0, 5); // HH:MM
+
+  // ❌ More than 2 scans
+  if (scans.length >= 2) {
+    speak("Attendance already done");
+    return;
+  }
+
+  // ❌ Check 60 min gap for 2nd scan
+  if (scans.length === 1) {
+    const [h, m] = scans[0].split(":").map(Number);
+    const firstTime = new Date();
+    firstTime.setHours(h, m, 0, 0);
+
+    const diffMinutes = (now - firstTime) / 60000;
+
+    if (diffMinutes < 60) {
+      speak("Scan after 60 minutes");
+      return;
+    }
+  }
+
+  // ✅ Save scan
+  scans.push(timeStr);
   localStorage.setItem("attendance", JSON.stringify(attendance));
 
   speak("Attendance successful");
-  showStatus(`Present: ${student.id}`, true);
 }
 
-function stopScan() {
-  if (html5Qr) {
-    html5Qr.stop().then(() => {
-      window.close();
-    });
-  }
-}
-
-/* ===== Voice Feedback ===== */
+/* 🔊 VOICE FEEDBACK */
 function speak(text) {
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = "en-IN";
+  window.speechSynthesis.cancel();
   window.speechSynthesis.speak(msg);
-}
-
-/* ===== Status Text ===== */
-function showStatus(text, success) {
-  const el = document.getElementById("scanStatus");
-  el.innerText = text;
-  el.className = success ? "success-text" : "error-text";
 }
