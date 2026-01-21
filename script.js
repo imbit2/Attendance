@@ -42,3 +42,32 @@ function markPresentFromQR(id) {
   saveAttendance(att);
   alert(student.name + " marked Present");
 }
+document.addEventListener("DOMContentLoaded", () => {
+  autoStoreAbsentForToday();
+});
+
+function autoStoreAbsentForToday() {
+  const today = new Date().toISOString().split("T")[0];
+
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  let attendance = JSON.parse(localStorage.getItem("attendance")) || {};
+
+  if (!attendance[today]) {
+    attendance[today] = {};
+  }
+
+  students.forEach(student => {
+    // 🔴 SKIP if student name is empty
+    if (!student.name || student.name.trim() === "") return;
+
+    if (!attendance[today][student.id]) {
+      attendance[today][student.id] = {
+        status: "Absent",
+        inTime: "",
+        outTime: ""
+      };
+    }
+  });
+
+  localStorage.setItem("attendance", JSON.stringify(attendance));
+}
