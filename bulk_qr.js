@@ -36,7 +36,7 @@ function generateBulk() {
     box.appendChild(qrDiv);
     qrGrid.appendChild(box);
 
-     const qrValue = `${studentId}|student_profile.html?id=${studentId}`;
+     const qrValue = `${studentId}|https://imbit2.github.io/Attendance/student_profile.html?id=${studentId}`;
 
 new QRCode(qrDiv, {
   text: qrValue,
@@ -330,6 +330,7 @@ function saveGeneratedIdsToStudents(ids) {
 
   localStorage.setItem("students", JSON.stringify(students));
 }*/
+
 
 
 
