@@ -5,17 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 
-  <!-- Instascan -->
-  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <!-- ✅ WORKING Instascan CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0/instascan.min.js"></script>
 </head>
 
-<body onload="startScan()">
+<body>
 
 <div class="page-container">
   <h2 class="page-title">QR Attendance Scanner</h2>
 
-  <video id="qrVideo" style="width:100%;border-radius:16px;"></video>
-  <button onclick="startScan()">Start Scan</button>
+  <video
+    id="qrVideo"
+    playsinline
+    style="width:100%;border-radius:16px;">
+  </video>
+
+  <button class="primary-btn" onclick="startScan()">
+    Start Scan
+  </button>
+
   <button class="primary-btn danger-btn" onclick="stopScan()">
     End Scan
   </button>
@@ -24,4 +32,3 @@
 <script src="scan_qr.js"></script>
 </body>
 </html>
-
