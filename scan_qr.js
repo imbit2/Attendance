@@ -4,25 +4,34 @@ const today = new Date().toISOString().split("T")[0];
 function startScan() {
   const video = document.getElementById("qrVideo");
 
+  // REQUIRED for mobile
+  video.setAttribute("playsinline", true);
+
   scanner = new Instascan.Scanner({
     video: video,
-    mirror: true // FRONT camera
+    mirror: true
   });
 
   scanner.addListener("scan", handleScan);
 
-  Instascan.Camera.getCameras().then(cameras => {
-    if (cameras.length === 0) {
-      alert("No camera found");
-      return;
-    }
+  Instascan.Camera.getCameras()
+    .then(cameras => {
+      if (!cameras || cameras.length === 0) {
+        alert("No camera found");
+        return;
+      }
 
-    const frontCam = cameras.find(c =>
-      c.name.toLowerCase().includes("front")
-    );
+      // Prefer front camera safely
+      let cam = cameras.find(c =>
+        (c.name || "").toLowerCase().includes("front")
+      );
 
-    scanner.start(frontCam || cameras[0]);
-  });
+      scanner.start(cam || cameras[0]);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Camera permission denied or not supported");
+    });
 }
 
 function stopScan() {
@@ -47,37 +56,30 @@ function handleScan(content) {
   }
 
   const scans = attendance[today][student.id].scans;
-
   const now = new Date();
-  const timeStr = now.toTimeString().slice(0, 5); // HH:MM
+  const timeStr = now.toTimeString().slice(0, 5);
 
-  // ❌ Max 2 scans
   if (scans.length >= 2) {
     speak("Attendance already done");
     return;
   }
 
-  // ❌ 60 min gap check
   if (scans.length === 1) {
     const [h, m] = scans[0].split(":").map(Number);
     const firstScan = new Date();
     firstScan.setHours(h, m, 0, 0);
 
-    const diff = (now - firstScan) / 60000;
-    if (diff < 60) {
+    if ((now - firstScan) / 60000 < 60) {
       speak("Scan after 60 minutes");
       return;
     }
   }
 
-  // ✅ Save scan
   scans.push(timeStr);
   localStorage.setItem("attendance", JSON.stringify(attendance));
-
   speak("Attendance successful");
 }
 
-/* 🔊 Voice feedback */
 function speak(text) {
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = "en-IN";
