@@ -36,21 +36,12 @@ function generateBulk() {
     box.appendChild(qrDiv);
     qrGrid.appendChild(box);
 
-     const qrValue = `${studentId}|https://imbit2.github.io/Attendance/student_profile.html?id=${studentId}`;
-
-new QRCode(qrDiv, {
-  text: qrValue,
-  width: 76,
-  height: 76,
-  correctLevel: QRCode.CorrectLevel.H
-});
-
-    /* new QRCode(qrDiv, {
+     new QRCode(qrDiv, {
       text: studentId,
       width: 76,
       height: 76,
       correctLevel: QRCode.CorrectLevel.H
-    }); */
+    });
   }
 
   localStorage.setItem("lastPTCId", last + count);
@@ -330,6 +321,7 @@ function saveGeneratedIdsToStudents(ids) {
 
   localStorage.setItem("students", JSON.stringify(students));
 }*/
+
 
 
 
