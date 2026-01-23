@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function autoStoreAbsentForToday() {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
 
   let students = JSON.parse(localStorage.getItem("students")) || [];
   let attendance = JSON.parse(localStorage.getItem("attendance")) || {};
@@ -71,3 +71,10 @@ function autoStoreAbsentForToday() {
 
   localStorage.setItem("attendance", JSON.stringify(attendance));
 }
+window.addEventListener("pageshow", function (event) {
+  // If page is loaded from back/forward cache
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+
