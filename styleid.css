@@ -3,7 +3,7 @@
 ========================= */
 * {
   box-sizing: border-box;
-}
+} 
 
 body {
   margin: 0;
@@ -400,6 +400,7 @@ tr:last-child td {
   padding: 6px 20px;
   cursor: pointer;
 }
+
 
 
 
