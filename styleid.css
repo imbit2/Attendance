@@ -48,11 +48,11 @@ input,
 select,
 textarea {
   width: 100%;
-  padding: 14px 16px;
+  padding: 10px 10px;
   font-size: 16px;
   border-radius: 12px;
   border: 1px solid #dcdfe6;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   background: #fff;
 }
 
@@ -400,6 +400,7 @@ tr:last-child td {
   padding: 6px 20px;
   cursor: pointer;
 }
+
 
 
 
