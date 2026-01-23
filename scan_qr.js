@@ -94,6 +94,11 @@ function handleAttendance(content) {
       speak("Scan after sixty minutes");
       return;
     }
+    // ✅ 2nd successful scan
+    scans.push(timeStr);
+    localStorage.setItem("attendance", JSON.stringify(attendance));
+    speak("Today's attendance is successful");
+    return;
   }
 
   /* ✅ Rule 1: Successful scan */
@@ -120,4 +125,5 @@ function speak(text) {
     scanLocked = false;
   }, 3000);
 }
+
 
