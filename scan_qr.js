@@ -52,13 +52,13 @@ let scanLocked = false;
 
 function handleAttendance(content) {
   if (scanLocked) return;
-  
-  scanLocked = true;
-  
+
   const students = JSON.parse(localStorage.getItem("students")) || [];
   const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
 
   const student = students.find(s => s.id === content);
+
+  /* ❌ Invalid ID */
   if (!student) {
     speak("Invalid ID");
     return;
@@ -66,12 +66,17 @@ function handleAttendance(content) {
 
   if (!attendance[today]) attendance[today] = {};
   if (!attendance[today][student.id]) {
-    attendance[today][student.id] = { scans: [] };
+    attendance[today][student.id] = {
+      scans: [],
+      status: "Absent"
+    };
   }
 
-  const scans = attendance[today][student.id].scans;
+  const record = attendance[today][student.id];
+  const scans = record.scans;
+
   const now = new Date();
-  const timeStr = now.toTimeString().slice(0, 5);
+  const timeStr = now.toTimeString().slice(0, 5); // HH:MM
 
   /* ❌ Rule 3: More than 2 scans */
   if (scans.length >= 2) {
@@ -93,22 +98,25 @@ function handleAttendance(content) {
 
   /* ✅ Rule 1: Successful scan */
   scans.push(timeStr);
+  record.status = "Present"; // ✅ MARK PRESENT IMMEDIATELY
+
   localStorage.setItem("attendance", JSON.stringify(attendance));
 
   speak("Scan successful");
-
-  /* ⏸ Pause 5 seconds before next scan */
-  setTimeout(() => {
-    scanLocked = false;
-  }, 5000);
 }
 
 /* 🔊 Voice feedback */
 function speak(text) {
+  scanLocked = true;
+
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = "en-IN";
+
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
+
+  /* ⏸ Pause scanner for 3 seconds after EVERY message */
+  setTimeout(() => {
+    scanLocked = false;
+  }, 3000);
 }
-
-
