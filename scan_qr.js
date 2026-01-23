@@ -48,7 +48,11 @@ function onScanFailure() {
 /* =========================
    ATTENDANCE LOGIC (UNCHANGED)
 ========================= */
+let scanLocked = false;
+
 function handleAttendance(content) {
+  if (scanLocked) return;
+
   const students = JSON.parse(localStorage.getItem("students")) || [];
   const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
 
@@ -67,26 +71,35 @@ function handleAttendance(content) {
   const now = new Date();
   const timeStr = now.toTimeString().slice(0, 5);
 
-  // Max 2 scans
+  /* ❌ Rule 3: More than 2 scans */
   if (scans.length >= 2) {
     speak("Attendance already done");
     return;
   }
 
-  // 60 min gap
+  /* ❌ Rule 2: 2nd scan before 60 minutes */
   if (scans.length === 1) {
     const [h, m] = scans[0].split(":").map(Number);
-    const first = new Date();
-    first.setHours(h, m, 0, 0);
-    if ((now - first) / 60000 < 60) {
+    const firstScan = new Date();
+    firstScan.setHours(h, m, 0, 0);
+
+    if ((now - firstScan) / 60000 < 60) {
       speak("Scan after sixty minutes");
       return;
     }
   }
 
+  /* ✅ Rule 1: Successful scan */
   scans.push(timeStr);
   localStorage.setItem("attendance", JSON.stringify(attendance));
-  speak("Attendance successful");
+
+  scanLocked = true;
+  speak("Scan successful");
+
+  /* ⏸ Pause 3 seconds before next scan */
+  setTimeout(() => {
+    scanLocked = false;
+  }, 3000);
 }
 
 /* 🔊 Voice feedback */
@@ -96,3 +109,4 @@ function speak(text) {
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 }
+
