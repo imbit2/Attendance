@@ -1,40 +1,58 @@
-let qrScanner;
+let html5QrCode;
 const today = new Date().toISOString().split("T")[0];
 
+window.addEventListener("load", startScan);
+
 function startScan() {
-  if (qrScanner) return;
+  html5QrCode = new Html5Qrcode("qr-reader");
 
-  qrScanner = new Html5Qrcode("qr-reader");
+  Html5Qrcode.getCameras().then(devices => {
+    if (!devices || devices.length === 0) {
+      alert("No camera found");
+      return;
+    }
 
-  qrScanner.start(
-    { facingMode: "user" }, // ✅ FRONT CAMERA
-    {
-      fps: 10,
-      qrbox: 250
-    },
-    handleScan,
-    () => {}
-  ).catch(err => {
-    alert("Camera error: " + err);
+    // ✅ Prefer BACK camera
+    const backCam =
+      devices.find(d => d.label.toLowerCase().includes("back")) ||
+      devices[devices.length - 1]; // fallback
+
+    html5QrCode.start(
+      { deviceId: { exact: backCam.id } },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }, // bigger = easier focus
+        aspectRatio: 1.0,
+        disableFlip: true
+      },
+      onScanSuccess,
+      onScanFailure
+    );
   });
 }
 
 function stopScan() {
-  if (qrScanner) {
-    qrScanner.stop().then(() => {
-      qrScanner.clear();
-      qrScanner = null;
-      window.close();
-    });
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => window.close());
   }
 }
 
-function handleScan(content) {
+function onScanSuccess(content) {
+  handleAttendance(content);
+}
+
+function onScanFailure() {
+  // ignore scan errors
+}
+
+/* =========================
+   ATTENDANCE LOGIC (UNCHANGED)
+========================= */
+function handleAttendance(content) {
   const students = JSON.parse(localStorage.getItem("students")) || [];
   const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
 
   const student = students.find(s => s.id === content);
-
   if (!student) {
     speak("Invalid ID");
     return;
@@ -49,27 +67,25 @@ function handleScan(content) {
   const now = new Date();
   const timeStr = now.toTimeString().slice(0, 5);
 
-  // ❌ Max 2 scans per day
+  // Max 2 scans
   if (scans.length >= 2) {
     speak("Attendance already done");
     return;
   }
 
-  // ❌ 60 min gap
+  // 60 min gap
   if (scans.length === 1) {
     const [h, m] = scans[0].split(":").map(Number);
     const first = new Date();
     first.setHours(h, m, 0, 0);
-
     if ((now - first) / 60000 < 60) {
-      speak("Scan after 60 minutes");
+      speak("Scan after sixty minutes");
       return;
     }
   }
 
   scans.push(timeStr);
   localStorage.setItem("attendance", JSON.stringify(attendance));
-
   speak("Attendance successful");
 }
 
@@ -77,6 +93,6 @@ function handleScan(content) {
 function speak(text) {
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = "en-IN";
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(msg);
+  speechSynthesis.cancel();
+  speechSynthesis.speak(msg);
 }
