@@ -5,18 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 
-  <!-- ✅ WORKING QR SCANNER -->
+  <!-- html5-qrcode -->
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 
-<body>
+<body onload="startScan()">
 
 <div class="page-container">
   <h2 class="page-title">QR Attendance Scanner</h2>
 
   <div id="qr-reader" style="width:100%;"></div>
-
-  <button class="primary-btn" onclick="startScan()">Start Scan</button>
 
   <button class="primary-btn danger-btn" onclick="stopScan()">
     End Scan
