@@ -97,7 +97,7 @@ function handleAttendance(content) {
     // ✅ 2nd successful scan
     scans.push(timeStr);
     localStorage.setItem("attendance", JSON.stringify(attendance));
-    speak("Today's attendance is successful");
+    speak("Thank You");
     return;
   }
 
@@ -107,7 +107,7 @@ function handleAttendance(content) {
 
   localStorage.setItem("attendance", JSON.stringify(attendance));
 
-  speak("Scan successful");
+  speak("Welcome to Playmate");
 }
 
 /* 🔊 Voice feedback */
@@ -125,5 +125,6 @@ function speak(text) {
     scanLocked = false;
   }, 3000);
 }
+
 
 
