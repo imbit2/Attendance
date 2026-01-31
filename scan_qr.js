@@ -7,7 +7,7 @@ const today = new Date().toLocaleDateString("en-CA");
 }); */
 
 function startScan() {
-  if (scanStarted) return; // prevent double-start
+  if (scanStarted) return;
   scanStarted = true;
 
   html5QrCode = new Html5Qrcode("qr-reader");
@@ -28,9 +28,16 @@ function startScan() {
         { deviceId: { exact: backCam.id } },
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 },
+          qrbox: { width: 300, height: 300 },
           aspectRatio: 1.0,
-          disableFlip: true
+          disableFlip: true,
+          experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true
+          },
+          videoConstraints: {
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          }
         },
         onScanSuccess,
         onScanFailure
@@ -39,8 +46,6 @@ function startScan() {
     .catch(err => {
       console.log("Camera error:", err);
       scanStarted = false;
-
-      // retry after 1 sec
       setTimeout(startScan, 1000);
     });
 }
@@ -62,8 +67,12 @@ function onScanSuccess(content) {
   handleAttendance(content);
 }
 
-function onScanFailure() {
-  // ignore errors
+let failCooldown = false;
+
+function onScanFailure(error) {
+  if (failCooldown) return;
+  failCooldown = true;
+  setTimeout(() => failCooldown = false, 200); // 0.2 sec delay
 }
 
 /* =========================
@@ -139,4 +148,5 @@ function speak(text) {
     scanLocked = false;
   }, 3000);
 }
+
 
