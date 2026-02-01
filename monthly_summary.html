@@ -1,23 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Monthly Summary</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Global Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Page-specific improvements */
+    #summaryTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    #summaryTable th, #summaryTable td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    #summaryTable th {
+      background: #3498db;
+      color: white;
+    }
+
+    #summaryTable tr:nth-child(even) {
+      background: #f4f6f8;
+    }
+
+    .controls {
+      margin: 10px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type="month"] {
+      padding: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 8px 15px;
+      font-size: 16px;
+      background: #3498db;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #217dbb;
+    }
+  </style>
 </head>
 
 <body>
 <div class="page-container">
+
   <h2 class="page-title">Monthly Summary</h2>
 
-  <input type="month" id="monthInput">
-  <button onclick="loadSummary()">Load</button>
-  <button onclick="exportExcel()">Export Excel</button>
+  <div class="controls">
+    <input type="month" id="monthInput">
+    <button onclick="loadSummary()">Load</button>
+    <button onclick="exportExcel()">Export</button>
+  </div>
 
   <table id="summaryTable">
     <thead></thead>
     <tbody></tbody>
   </table>
+
 </div>
 
 <script src="monthly_summary.js"></script>
