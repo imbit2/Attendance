@@ -1,12 +1,15 @@
 // student_list.js
 
 let students = [];
+let studentsCache = []; // Faster global cache for scan_qr.js
 
 document.addEventListener("DOMContentLoaded", () => {
   students = JSON.parse(localStorage.getItem("students")) || [];
+  studentsCache = students; // Make cache available for scanner
   renderStudentList(students);
 });
 
+/* RENDER TABLE */
 function renderStudentList(list) {
   const tbody = document.getElementById("studentTableBody");
   tbody.innerHTML = "";
@@ -41,7 +44,7 @@ function renderStudentList(list) {
   });
 }
 
-/* SEARCH */
+/* SEARCH FUNCTION */
 function searchStudent() {
   const q = document.getElementById("searchInput").value.toLowerCase();
 
@@ -57,8 +60,9 @@ function clearSearch() {
   document.getElementById("searchInput").value = "";
   renderStudentList(students);
 }
+
+/* FORCE RELOAD ON BACK BUTTON */
 window.addEventListener("pageshow", function (event) {
-  // If page is loaded from back/forward cache
   if (event.persisted) {
     window.location.reload();
   }
