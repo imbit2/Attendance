@@ -1,4 +1,6 @@
-/* ===== HELPERS ===== */
+/* =========================
+   HELPERS
+========================= */
 function getAttendance() {
   return JSON.parse(localStorage.getItem("attendance")) || {};
 }
@@ -7,9 +9,11 @@ function getStudents() {
   return JSON.parse(localStorage.getItem("students")) || [];
 }
 
-/* ===== LOAD SUMMARY ===== */
+/* =========================
+   LOAD MONTHLY SUMMARY
+========================= */
 function loadSummary() {
-  const month = document.getElementById("monthInput").value;
+  const month = document.getElementById("monthInput").value; // format: YYYY-MM
   if (!month) {
     alert("Please select a month");
     return;
@@ -34,12 +38,16 @@ function loadSummary() {
   students.forEach(student => {
     let presentCount = 0;
 
+    // Check all dates inside attendance
     for (let date in attendance) {
-      if (date.startsWith(month)) {
-        const record = attendance[date][student.id];
-        if (record && record.scans && record.scans.length > 0) {
-          presentCount++;
-        }
+      if (!date.startsWith(month)) continue;
+
+      const dayRecord = attendance[date];
+      const studentRecord = dayRecord[student.id];
+
+      // Student is present if scans array exists and has one or more entries
+      if (studentRecord && Array.isArray(studentRecord.scans) && studentRecord.scans.length > 0) {
+        presentCount++;
       }
     }
 
@@ -53,7 +61,9 @@ function loadSummary() {
   });
 }
 
-/* ===== EXPORT TO EXCEL ===== */
+/* =========================
+   EXPORT TO EXCEL (CSV)
+========================= */
 function exportExcel() {
   const month = document.getElementById("monthInput").value;
   if (!month) {
@@ -70,11 +80,13 @@ function exportExcel() {
     let presentCount = 0;
 
     for (let date in attendance) {
-      if (date.startsWith(month)) {
-        const record = attendance[date][student.id];
-        if (record && record.scans && record.scans.length > 0) {
-          presentCount++;
-        }
+      if (!date.startsWith(month)) continue;
+
+      const dayRecord = attendance[date];
+      const studentRecord = dayRecord[student.id];
+
+      if (studentRecord && Array.isArray(studentRecord.scans) && studentRecord.scans.length > 0) {
+        presentCount++;
       }
     }
 
