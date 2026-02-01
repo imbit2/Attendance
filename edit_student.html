@@ -1,48 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Edit Student</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styleid.css">
+
+  <!-- Reuse global style -->
+  <link rel="stylesheet" href="style.css">
+  
 </head>
+
 <body>
+
 <div class="page-container">
-<h2 class="page-title">Edit Student</h2>
 
-<label>Student ID</label>
-<input id="studentId" readonly>
+  <h2 class="page-title">Edit Student</h2>
 
-<label>Student Name</label>
-<input id="studentName">
+  <!-- STUDENT ID (READ ONLY) -->
+  <label class="input-label">Student ID</label>
+  <input class="input-field" id="studentId" readonly>
 
-<label>Guardian's Name</label>
-<input id="studentGuardian">
+  <!-- NAME -->
+  <label class="input-label">Student Name</label>
+  <input class="input-field" id="studentName">
 
-<label>DOB</label>
-<input type="date" id="studentDob">
+  <!-- GUARDIAN -->
+  <label class="input-label">Guardian Name</label>
+  <input class="input-field" id="studentGuardian">
 
-<label>Current Belt</label>
-<input id="studentBelt">
+  <!-- DOB -->
+  <label class="input-label">Date of Birth</label>
+  <input class="input-field" type="date" id="studentDob">
 
-<label>Address</label>
-<input id="studentAddress">
+  <!-- BELT -->
+  <label class="input-label">Current Belt</label>
+  <input class="input-field" id="studentBelt">
 
-<label>Contact No</label>
-<input id="studentPhone">
+  <!-- ADDRESS -->
+  <label class="input-label">Address</label>
+  <textarea class="input-field" id="studentAddress" rows="2"></textarea>
 
-<button onclick="updateStudent()">Update Student</button>
-<!-- <button onclick="showHistory()">Attendance History</button>
+  <!-- PHONE -->
+  <label class="input-label">Contact Number</label>
+  <input class="input-field" id="studentPhone" inputmode="numeric">
 
-<div id="history"></div> -->
+  <!-- UPDATE BUTTON -->
+  <button class="primary-btn" onclick="updateStudent()">Update Student</button>
+
+  <!-- SHOW HISTORY -->
+  <button class="primary-btn secondary-btn" onclick="showHistory()">Show Attendance History</button>
+
+  <div id="history" class="card" style="margin-top:15px; display:block;"></div>
+
+  <!-- REPRINT CARD -->
+  <!-- <button class="primary-btn" style="background:#8e44ad;" onclick="reprintCard()">Reprint ID Card</button> -->
+
+</div>
 
 <script src="edit_student.js"></script>
-  </div>
 </body>
 </html>
-
-
-
-
-
-
-
