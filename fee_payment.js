@@ -80,9 +80,4 @@ function setStatus(studentId, month, value) {
   loadPaymentPage();
 }
 
-// Back
-function goBack() {
-  window.location.href = "fees.html";
-}
-
 
