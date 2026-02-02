@@ -1,16 +1,29 @@
 // student_list.js
 
 let students = [];
-let studentsCache = []; // Faster global cache for scan_qr.js
+let studentsCache = []; // Used by scan_qr.js
+
+/* LOAD + SYNC STORAGE */
+function refreshStudents() {
+  students = JSON.parse(localStorage.getItem("students")) || [];
+  studentsCache = students; // Keep QR scanner in sync
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  students = JSON.parse(localStorage.getItem("students")) || [];
-  studentsCache = students; // Make cache available for scanner
+  refreshStudents();
   renderStudentList(students);
+
+  // Instant live search
+  const searchBox = document.getElementById("searchInput");
+  if (searchBox) {
+    searchBox.addEventListener("input", searchStudent);
+  }
 });
 
 /* RENDER TABLE */
 function renderStudentList(list) {
+  if (!Array.isArray(list)) list = [];
+
   const tbody = document.getElementById("studentTableBody");
   tbody.innerHTML = "";
 
@@ -61,9 +74,10 @@ function clearSearch() {
   renderStudentList(students);
 }
 
-/* FORCE RELOAD ON BACK BUTTON */
+/* FORCE RELOAD WHEN RETURNING TO PAGE */
 window.addEventListener("pageshow", function (event) {
   if (event.persisted) {
-    window.location.reload();
+    refreshStudents();
+    renderStudentList(students);
   }
 });
