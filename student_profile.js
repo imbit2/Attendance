@@ -23,34 +23,43 @@ document.getElementById("pBelt").innerText = student.belt || "-";
 document.getElementById("pPhone").innerText = student.phone || "-";
 document.getElementById("pAddress").innerText = student.address || "-";
 
-renderAttendanceHistory(student.id);
-
-/* Generate QR CODE (NOT TEXT) */
+/* Generate QR CODE */
 new QRCode(document.getElementById("qrBox"), {
   text: student.id,
   width: 100,
   height: 100,
   correctLevel: QRCode.CorrectLevel.H
 });
-/* ===== Attendance History ===== */
+
+/* ===========================
+   NEW Attendance History
+=========================== */
 function renderAttendanceHistory(studentId) {
-  const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
+  const history = JSON.parse(localStorage.getItem("attendance_history")) || {};
   const historyDiv = document.getElementById("attendanceHistory");
 
   let html = "";
   let found = false;
 
-  Object.keys(attendance).sort().forEach(date => {
-    const record = attendance[date][studentId];
+  // Sort by date (ascending)
+  const dates = Object.keys(history).sort();
+
+  dates.forEach(date => {
+    const record = history[date][studentId];
 
     if (record) {
       found = true;
+
+      // Convert scans array to readable in/out
+      const inTime = record.scans?.[0] || "-";
+      const outTime = record.scans?.[1] || "-";
 
       html += `
         <div style="margin-bottom:8px;">
           <strong>${date}</strong>
           &nbsp; | &nbsp; ${record.status}
-          &nbsp; | &nbsp; In: ${record.inTime || "-"} &nbsp; | &nbsp; Out: ${record.outTime || "-"}
+          &nbsp; | &nbsp; In: ${inTime}
+          &nbsp; | &nbsp; Out: ${outTime}
         </div>
       `;
     }
@@ -63,4 +72,4 @@ function renderAttendanceHistory(studentId) {
   historyDiv.innerHTML = html;
 }
 
-
+renderAttendanceHistory(student.id);
