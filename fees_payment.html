@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fee Payment</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    h2 { margin-bottom: 10px; }
+    table { width: 50%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+
+    button {
+      padding: 6px 14px;
+      margin: 3px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+    }
+
+    .paid { background: #4CAF50; color: white; }
+    .due { background: #e74c3c; color: white; }
+  </style>
+</head>
+
+<body>
+
+  <h2 id="studentTitle">Fee Payment</h2>
+  <h3 id="yearTitle"></h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="paymentTable"></tbody>
+  </table>
+
+  <br>
+  <button onclick="goBack()">Back</button>
+
+  <script src="fees_payment.js"></script>
+
+</body>
+</html>
