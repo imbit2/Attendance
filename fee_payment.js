@@ -16,9 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPaymentPage();
 });
 
-// ==========================
-// LOAD PAYMENT PAGE
-// ==========================
+// Load Payment Page
 function loadPaymentPage() {
   let studentId = localStorage.getItem("feeSelectedStudent");
   if (!studentId) return;
@@ -29,47 +27,47 @@ function loadPaymentPage() {
   let currentYear = new Date().getFullYear();
   let fees = getFees();
 
-  // Ensure year exists
-  if (!fees[currentYear]) {
-    fees[currentYear] = {};
-    saveFees(fees);
-  }
-
-  // Ensure student record exists
+  if (!fees[currentYear]) fees[currentYear] = {};
   if (!fees[currentYear][studentId]) {
     fees[currentYear][studentId] = {};
     months.forEach(m => fees[currentYear][studentId][m] = "Due");
     saveFees(fees);
   }
 
-  document.getElementById("studentTitle").textContent = 
+  document.getElementById("studentTitle").textContent =
+    `Student ID: ${student.id}`;
+  document.getElementById("studentTitle").textContent =
     `Fee Payment for: ${student.name}`;
-
-  document.getElementById("yearTitle").textContent = 
+  document.getElementById("yearTitle").textContent =
     `Year: ${currentYear}`;
 
   let table = document.getElementById("paymentTable");
   table.innerHTML = "";
 
-  months.forEach(m => {
-    let status = fees[currentYear][studentId][m];
+  months.forEach(month => {
+    let status = fees[currentYear][studentId][month];
 
-    let tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${m}</td>
+    let row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${month}</td>
+
       <td>
-        <button class="paid" onclick="setStatus('${studentId}','${m}','Paid')">PAID</button>
-        <button class="due" onclick="setStatus('${studentId}','${m}','Due')">DUE</button>
-        <div style="margin-top:5px; font-weight:bold;">${status}</div>
+        <button class="tick" onclick="setStatus('${studentId}','${month}','Paid')">✔</button>
+        <button class="cross" onclick="setStatus('${studentId}','${month}','Due')">✖</button>
+      </td>
+
+      <td>
+        <span class="status-box ${status === "Paid" ? "paid-box" : "due-box"}">
+          ${status}
+        </span>
       </td>
     `;
-    table.appendChild(tr);
+
+    table.appendChild(row);
   });
 }
 
-// ==========================
-// UPDATE STATUS
-// ==========================
+// Update status
 function setStatus(studentId, month, value) {
   let year = new Date().getFullYear();
   let fees = getFees();
@@ -77,12 +75,10 @@ function setStatus(studentId, month, value) {
   fees[year][studentId][month] = value;
   saveFees(fees);
 
-  loadPaymentPage(); // refresh
+  loadPaymentPage();
 }
 
-// ==========================
-// GO BACK
-// ==========================
+// Back
 function goBack() {
   window.location.href = "fees.html";
 }
