@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fees Management</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    button { padding: 6px 12px; cursor: pointer; }
+  </style>
+</head>
+
+<body>
+
+  <h2>Fees Management</h2>
+
+  <label>Select Year:</label>
+  <select id="yearDropdown"></select>
+
+  <button onclick="exportFeesExcel()">Export Excel</button>
+
+  <table id="feesTable">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="fees.js"></script>
+
+</body>
+</html>
