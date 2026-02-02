@@ -3,34 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Fee Payment</title>
+
   <style>
     body { font-family: Arial; padding: 20px; }
     h2 { margin-bottom: 10px; }
-    table { width: 50%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+    table { width: 60%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 12px; text-align: center; font-size: 16px; }
 
-    button {
-      padding: 6px 14px;
-      margin: 3px;
+    .tick, .cross {
+      font-size: 22px;
       cursor: pointer;
-      border-radius: 4px;
+      padding: 6px 12px;
+      border-radius: 6px;
       border: none;
     }
 
-    .paid { background: #4CAF50; color: white; }
-    .due { background: #e74c3c; color: white; }
+    .tick { color: white; background: #27ae60; }
+    .cross { color: white; background: #c0392b; }
+
+    .status-box {
+      margin-top: 6px;
+      padding: 4px 10px;
+      display: inline-block;
+      border-radius: 4px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .paid-box { background: #2ecc71; }
+    .due-box { background: #e74c3c; }
   </style>
 </head>
 
 <body>
 
-  <h2 id="studentTitle">Fee Payment</h2>
+  <h2 id="studentID"></h2>
+  <h3 id="studentTitle">Fee Payment</h3>
   <h3 id="yearTitle"></h3>
+  <button onclick="goBack()">Back</button>
 
   <table>
     <thead>
       <tr>
         <th>Month</th>
+        <th>Mark</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -38,10 +54,8 @@
   </table>
 
   <br>
-  <button onclick="goBack()">Back</button>
 
-  <script src="fee_payment.js"></script>
+  <script src="fees_payment.js"></script>
 
 </body>
 </html>
-
