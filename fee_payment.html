@@ -5,30 +5,37 @@
   <link rel="stylesheet" href="style.css">
   <title>Fee Payment</title>
   <style>
-    .tick, .cross {
-      cursor: pointer;
-      margin-top: 6px;
-      padding: 4px 10px;
-      display: inline-block;
-      border-radius: 4px;
-      font-weight: bold;
-    }
+  .mark-buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .tick { color: white; background: #27ae60; }
-    .cross { color: white; background: #c0392b; }
+  .tick, .cross {
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    font-weight: bold;
+    width: 40px;       /* equal size */
+    text-align: center;
+  }
 
-    .status-box {
-      margin-top: 6px;
-      padding: 4px 10px;
-      display: inline-block;
-      border-radius: 4px;
-      font-weight: bold;
-      color: white;
-    }
+  .tick { background: #27ae60; color: white; }
+  .cross { background: #c0392b; color: white; }
 
-    .paid-box { background: #2ecc71; }
-    .due-box { background: #e74c3c; }
-  </style>
+  .status-box {
+    padding: 4px 10px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .paid-box { background: #2ecc71; }
+  .due-box { background: #e74c3c; }
+</style>
 </head>
 
 <body>
@@ -55,11 +62,3 @@
   </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
