@@ -1,102 +1,47 @@
-// ===============================
-// ATTENDANCE DETAILS PAGE
-// ===============================
+/* ============================
+   LOAD ATTENDANCE DETAILS
+============================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const dateInput = document.getElementById("attendanceDate");
+  const dateParam = new URLSearchParams(location.search).get("date");
 
-  const today = new Date().toLocaleDateString("en-CA");
-  dateInput.value = today;
-
-  loadAttendance(today);
-
-  dateInput.addEventListener("change", () => {
-    loadAttendance(dateInput.value);
-  });
-});
-
-// ===============================
-// LOAD ATTENDANCE FOR A DATE
-// ===============================
-function loadAttendance(date) {
-  const students = JSON.parse(localStorage.getItem("students")) || [];
-  const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
-  const tbody = document.getElementById("attendanceTableBody");
-
-  tbody.innerHTML = "";
-
-  if (students.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5">No students found</td></tr>`;
+  if (!dateParam) {
+    alert("Date missing");
     return;
   }
 
-  const dayData = attendance[date] || {};
+  document.getElementById("dateTitle").innerText = dateParam;
 
-  let rows = students.map(s => {
-    const rec = dayData[s.id] || { scans: [], status: "Absent" };
-    const scans = rec.scans || [];
+  const students = JSON.parse(localStorage.getItem("students")) || [];
+  const history = JSON.parse(localStorage.getItem("attendance_history")) || {};
 
-    return {
-      id: s.id,
-      name: s.name || "-",
-      inTime: scans[0] || "-",
-      outTime: scans[1] || "-",
-      status: scans.length > 0 ? "Present" : "Absent"
-    };
-  });
+  const dayData = history[dateParam] || {};  // Only selected day's data
 
-  // Sort: Present first → IN time
-  rows.sort((a, b) => {
-    if (a.status !== b.status)
-      return a.status === "Present" ? -1 : 1;
+  const tbody = document.getElementById("attendanceTableBody");
+  tbody.innerHTML = "";
 
-    if (a.status === "Absent") return 0;
+  students.forEach(student => {
+    const record = dayData[student.id];
 
-    return a.inTime.localeCompare(b.inTime);
-  });
+    let inTime = "-";
+    let outTime = "-";
+    let status = "Absent";
 
-  // Render table
-  rows.forEach(r => {
+    if (record) {
+      status = record.status || "Present";
+      inTime = record.scans?.[0] || "-";
+      outTime = record.scans?.[1] || "-";
+    }
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${r.id}</td>
-      <td>${r.name}</td>
-      <td>${r.inTime}</td>
-      <td>${r.outTime}</td>
-      <td style="font-weight:700;color:${r.status === "Present" ? "#27ae60" : "#e74c3c"}">
-        ${r.status}
-      </td>
+      <td>${student.id}</td>
+      <td>${student.name || "-"}</td>
+      <td>${status}</td>
+      <td>${inTime}</td>
+      <td>${outTime}</td>
     `;
+
     tbody.appendChild(tr);
   });
-}
-
-// ===============================
-// EXPORT EXCEL (CSV)
-// ===============================
-function exportExcel() {
-  const date = document.getElementById("attendanceDate").value;
-  const attendance = JSON.parse(localStorage.getItem("attendance")) || {};
-  const students = JSON.parse(localStorage.getItem("students")) || {};
-
-  let csv = "Student ID,Name,IN,OUT,Status\n";
-
-  students.forEach(s => {
-    const rec = attendance[date]?.[s.id] || { scans: [] };
-    const scans = rec.scans || [];
-
-    csv += [
-      s.id,
-      s.name || "",
-      scans[0] || "",
-      scans[1] || "",
-      scans.length > 0 ? "Present" : "Absent"
-    ].join(",") + "\n";
-  });
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `Attendance_${date}.csv`;
-  link.click();
-}
+});
