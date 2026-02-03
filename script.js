@@ -10,54 +10,83 @@ function saveStudents(data) {
 }
 
 /* =========================================================
-   ATTENDANCE HELPERS (NEW SYSTEM)
+   DATE HELPERS
 ========================================================= */
-
-// today's date in YYYY-MM-DD
 function today() {
   return new Date().toLocaleDateString("en-CA");
 }
 
+function yesterday() {
+  let d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toLocaleDateString("en-CA");
+}
+
 /* =========================================================
-   AUTO-MARK ABSENT FOR TODAY (RUNS ON PAGE LOAD)
+   RUN ON PAGE LOAD
 ========================================================= */
 document.addEventListener("DOMContentLoaded", () => {
-  autoStoreAbsentForToday();
+  autoMarkAbsentsForYesterday();
+  ensureTodayIsInitialized();
 });
 
-function autoStoreAbsentForToday() {
-  const date = today();
+/* =========================================================
+   1️⃣ AUTO-MARK ABSENT FOR YESTERDAY
+========================================================= */
+function autoMarkAbsentsForYesterday() {
+  let y = yesterday();
+  let todayDate = today();
 
   let students = getStudents();
-  let todayAtt = JSON.parse(localStorage.getItem("attendance_today")) || {};
   let history = JSON.parse(localStorage.getItem("attendance_history")) || {};
 
-  if (!history[date]) history[date] = {};
+  // Already processed yesterday? stop.
+  if (history[y] && history[y]._absentsProcessed) return;
 
-  // loop all students with a valid name
-  students.forEach(student => {
-    if (!student.name || student.name.trim() === "") return;
+  // If no record for yesterday → create empty
+  if (!history[y]) history[y] = {};
 
-    // If student not already added today → mark Absent
-    if (!todayAtt[student.id]) {
-      todayAtt[student.id] = {
-        scans: [],          // no scans yet
+  // Mark all missing students as absent
+  students.forEach(s => {
+    if (!s.name || s.name.trim() === "") return; // skip empty
+
+    // If student never scanned yesterday → Absent
+    if (!history[y][s.id]) {
+      history[y][s.id] = {
+        scans: [],
         status: "Absent",
         inTime: "",
         outTime: ""
       };
-
-      history[date][student.id] = todayAtt[student.id];
     }
   });
 
-  // Save back
+  // Add flag so it doesn't run twice
+  history[y]._absentsProcessed = true;
+
+  localStorage.setItem("attendance_history", JSON.stringify(history));
+}
+
+/* =========================================================
+   2️⃣ ENSURE TODAY ATTENDANCE STRUCTURE EXISTS
+   (BUT DO NOT MARK ABSENT)
+========================================================= */
+function ensureTodayIsInitialized() {
+  const date = today();
+
+  let todayAtt = JSON.parse(localStorage.getItem("attendance_today")) || {};
+  let history = JSON.parse(localStorage.getItem("attendance_history")) || {};
+
+  if (!history[date]) history[date] = {};
+  if (!todayAtt) todayAtt = {};
+
+  // Save back but DO NOT fill absents
   localStorage.setItem("attendance_today", JSON.stringify(todayAtt));
   localStorage.setItem("attendance_history", JSON.stringify(history));
 }
 
 /* =========================================================
-   FIX SAFARI / MOBILE BACK-CACHE
+   SAFARI / MOBILE BACK-CACHE FIX
 ========================================================= */
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
