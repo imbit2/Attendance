@@ -90,9 +90,10 @@ function loadStudentTable() {
     tr.innerHTML = `
       <td>${stu.id}</td>
       <td>${stu.name}</td>
-      <td onclick="openFeePayment('${stu.id}')">
-        Manage
-      </td>
+      <a href="fees_payment.html"
+         onclick="openFeePayment('${s.id}')">
+         Manage
+      </a>
     `;
     tbody.appendChild(tr);
   });
@@ -103,7 +104,6 @@ function loadStudentTable() {
 // =========================
 function openFeePayment(studentId) {
   localStorage.setItem("feeSelectedStudent", studentId);
-  window.location.href = "fee_payment.html"; // you will create later
 }
 
 // =========================
@@ -144,6 +144,7 @@ function exportFeesExcel() {
   a.download = `Fees_${year}.csv`;
   a.click();
 }
+
 
 
 
