@@ -1,9 +1,66 @@
+/* =========================================================
+   MAIN PAGE LOADER
+========================================================= */
 document.addEventListener("DOMContentLoaded", () => {
-  const role = localStorage.getItem("logged_role");
-  if (!role) {
-    window.location.href = "login.html";
+
+  const filename = window.location.pathname.split("/").pop();
+
+  /* ---------------------------------------------
+     1️⃣ LOGIN PROTECTION (runs on all pages except login)
+  --------------------------------------------- */
+  if (filename !== "login.html") {
+    const role = localStorage.getItem("logged_role");
+
+    if (!role) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    enforceAdminPermissions(role);
   }
+
+  /* ---------------------------------------------
+     2️⃣ ATTENDANCE LOGIC (only for these pages)
+        -> index.html
+        -> scan.html
+  --------------------------------------------- */
+  const attendancePages = ["index.html"];
+
+  if (attendancePages.includes(filename)) {
+    autoMarkAbsentsForYesterday();
+    ensureTodayIsInitialized();
+  }
+
 });
+
+/* =========================================================
+   LOGIN / ROLE SYSTEM
+========================================================= */
+function enforceAdminPermissions(role) {
+
+  if (role !== "admin") {
+
+    // Disable ALL inputs
+    document.querySelectorAll("input, textarea").forEach(el => {
+      el.disabled = true;
+    });
+
+    // Disable non-navigation buttons
+    document.querySelectorAll("button").forEach(btn => {
+      if (!btn.classList.contains("nav-btn")) {
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+        btn.style.cursor = "not-allowed";
+      }
+    });
+
+    // Hide admin-only elements
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.style.display = "none";
+    });
+  }
+}
+
 function logout() {
   localStorage.removeItem("logged_role");
   window.location.href = "login.html";
@@ -34,34 +91,24 @@ function yesterday() {
 }
 
 /* =========================================================
-   RUN ON PAGE LOAD
-========================================================= */
-document.addEventListener("DOMContentLoaded", () => {
-  autoMarkAbsentsForYesterday();
-  ensureTodayIsInitialized();
-});
-
-/* =========================================================
    1️⃣ AUTO-MARK ABSENT FOR YESTERDAY
 ========================================================= */
 function autoMarkAbsentsForYesterday() {
   let y = yesterday();
-  let todayDate = today();
 
   let students = getStudents();
   let history = JSON.parse(localStorage.getItem("attendance_history")) || {};
 
-  // Already processed yesterday? stop.
+  // Already processed → skip
   if (history[y] && history[y]._absentsProcessed) return;
 
-  // If no record for yesterday → create empty
+  // Create empty container if missing
   if (!history[y]) history[y] = {};
 
-  // Mark all missing students as absent
+  // Mark all missing as absent
   students.forEach(s => {
-    if (!s.name || s.name.trim() === "") return; // skip empty
+    if (!s.name || s.name.trim() === "") return;
 
-    // If student never scanned yesterday → Absent
     if (!history[y][s.id]) {
       history[y][s.id] = {
         scans: [],
@@ -72,15 +119,14 @@ function autoMarkAbsentsForYesterday() {
     }
   });
 
-  // Add flag so it doesn't run twice
+  // Mark yesterday as processed
   history[y]._absentsProcessed = true;
 
   localStorage.setItem("attendance_history", JSON.stringify(history));
 }
 
 /* =========================================================
-   2️⃣ ENSURE TODAY ATTENDANCE STRUCTURE EXISTS
-   (BUT DO NOT MARK ABSENT)
+   2️⃣ ENSURE TODAY IS INITIALIZED (NO ABSENTS)
 ========================================================= */
 function ensureTodayIsInitialized() {
   const date = today();
@@ -89,18 +135,14 @@ function ensureTodayIsInitialized() {
   let history = JSON.parse(localStorage.getItem("attendance_history")) || {};
 
   if (!history[date]) history[date] = {};
-  if (!todayAtt) todayAtt = {};
 
-  // Save back but DO NOT fill absents
   localStorage.setItem("attendance_today", JSON.stringify(todayAtt));
   localStorage.setItem("attendance_history", JSON.stringify(history));
 }
 
 /* =========================================================
-   SAFARI / MOBILE BACK-CACHE FIX
+   SAFARI BACK-CACHE FIX
 ========================================================= */
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
-
-
