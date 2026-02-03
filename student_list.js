@@ -46,8 +46,8 @@ function renderStudentList(list) {
 
       <td>${student.name || "-"}</td>
 
-      <td>
-        <a href="edit_student.html?id=${student.id}" onclick="adminOnly()" class="small-btn">
+      <td onclick="adminOnly()">
+        <a href="edit_student.html?id=${student.id}" class="small-btn">
           Edit
         </a>
       </td>
@@ -81,4 +81,5 @@ window.addEventListener("pageshow", function (event) {
     renderStudentList(students);
   }
 });
+
 
