@@ -8,7 +8,7 @@ function getFees() {
 
 function saveFees(data) {
   localStorage.setItem("fees", JSON.stringify(data));
-}
+} 
 
 // Months
 const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -146,5 +146,6 @@ function exportFeesExcel() {
   a.download = `Fees_${year}.csv`;
   a.click();
 }
+
 
 
