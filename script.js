@@ -40,24 +40,20 @@ function enforceAdminPermissions(role) {
 
   if (role !== "admin") {
 
-    // Disable ALL inputs
-    document.querySelectorAll("input, textarea").forEach(el => {
-      el.disabled = true;
-    });
-
-    // Disable non-navigation buttons
-    document.querySelectorAll("button").forEach(btn => {
-      if (!btn.classList.contains("nav-btn")) {
-        btn.disabled = true;
-        btn.style.opacity = "0.5";
-        btn.style.cursor = "not-allowed";
-      }
-    });
-
     // Hide admin-only elements
     document.querySelectorAll(".admin-only").forEach(el => {
       el.style.display = "none";
     });
+  }
+}
+/* =========================================================
+   ADMIN-ONLY FUNCTION GUARD
+========================================================= */
+function adminOnly() {
+  const role = localStorage.getItem("logged_role");
+  if (role !== "admin") {
+    alert("Only admin can perform this action.");
+    throw new Error("Unauthorized action by coach.");
   }
 }
 
@@ -146,3 +142,4 @@ function ensureTodayIsInitialized() {
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
+
