@@ -10,6 +10,48 @@ try {
 }
 
 /* =============================
+   RESET ATTENDANCE (on page load)
+============================= */
+document.addEventListener("DOMContentLoaded", () => {
+  resetAttendanceForToday();
+  loadStudentsData();
+});
+
+/* =============================
+   RESET ATTENDANCE FOR TODAY
+============================= */
+function resetAttendanceForToday() {
+  const date = today();
+  let attendanceToday = JSON.parse(localStorage.getItem("attendance_today")) || {};
+  
+  // Check if the stored date matches today's date; if not, reset the data
+  if (!attendanceToday[date]) {
+    // Reset attendance for all students for today
+    let students = getStudents();
+
+    students.forEach(student => {
+      if (!student.name || student.name.trim() === "") return; // Skip students with no name
+
+      attendanceToday[student.id] = {
+        scans: [],
+        status: "Absent", // Mark as absent by default
+        inTime: "",
+        outTime: ""
+      };
+    });
+
+    localStorage.setItem("attendance_today", JSON.stringify(attendanceToday));
+  }
+}
+
+/* =============================
+   LOAD STUDENT DATA
+============================= */
+function loadStudentsData() {
+  studentsCache = getStudents();
+}
+
+/* =============================
    START QR SCAN
 ============================= */
 function startScan() {
