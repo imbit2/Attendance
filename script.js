@@ -144,4 +144,39 @@ window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
 
+function exportStudentsToExcel() {
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+
+    if (students.length === 0) {
+        alert("No student data found!");
+        return;
+    }
+
+    // Convert student object into clean table format
+    let exportData = students.map(s => ({
+        "Student ID": s.id,
+        "Name": s.name,
+        "DOB": s.dob || "",
+        "Gender": s.gender || "",
+        "Mobile": s.phone || "",
+        "Guardian": s.guardian || "",
+        "Address": s.address || "",
+        "Belt": s.belt || ""
+    }));
+
+    // Create sheet
+    let ws = XLSX.utils.json_to_sheet(exportData);
+
+    // Create workbook
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Students");
+
+    // Export file
+    XLSX.writeFile(wb, "Student_Master_Data.xlsx");
+
+    alert("Excel exported successfully!");
+}
+
+
+
 
