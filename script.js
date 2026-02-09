@@ -33,6 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 function exportStudentsToExcel() {
+    // Check if XLSX library loaded
+    if (typeof XLSX === "undefined") {
+        alert("Excel library not loaded. Please check your script includes.");
+        return;
+    }
+
     let students = JSON.parse(localStorage.getItem("students")) || [];
 
     if (students.length === 0) {
@@ -40,8 +46,8 @@ function exportStudentsToExcel() {
         return;
     }
 
-    // Convert student objects to Excel rows
-    let exportData = students.map(s => ({
+    // Column order is FIXED
+    const exportData = students.map(s => ({
         "Student ID": s.id || "",
         "Name": s.name || "",
         "Guardian": s.guardian || "",
@@ -53,14 +59,25 @@ function exportStudentsToExcel() {
         "Updated At": s.updatedAt || ""
     }));
 
-    let ws = XLSX.utils.json_to_sheet(exportData);
-    let wb = XLSX.utils.book_new();
+    // Create worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData, {
+        header: [
+            "Student ID", "Name", "Guardian", "Date of Birth",
+            "Address", "Belt", "Phone", "Created At", "Updated At"
+        ]
+    });
 
-    XLSX.utils.book_append_sheet(wb, ws, "Student Master");
+    // Auto-width for all columns
+    ws['!cols'] = Object.keys(exportData[0]).map(k => ({ wch: 20 }));
 
+    // Create workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Students");
+
+    // Save file
     XLSX.writeFile(wb, "Student_Master_Data.xlsx");
 
-    alert("Excel exported successfully!");
+    alert("Student Excel exported successfully!");
 }
 
 /* =========================================================
@@ -173,3 +190,4 @@ function ensureTodayIsInitialized() {
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
+
