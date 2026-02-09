@@ -32,6 +32,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+function exportStudentsToExcel() {
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+
+    if (students.length === 0) {
+        alert("No student data found to export!");
+        return;
+    }
+
+    // Convert student objects to Excel rows
+    let exportData = students.map(s => ({
+        "Student ID": s.id || "",
+        "Name": s.name || "",
+        "Guardian": s.guardian || "",
+        "Date of Birth": s.dob || "",
+        "Address": s.address || "",
+        "Belt": s.belt || "",
+        "Phone": s.phone || "",
+        "Created At": s.createdAt || "",
+        "Updated At": s.updatedAt || ""
+    }));
+
+    let ws = XLSX.utils.json_to_sheet(exportData);
+    let wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, "Student Master");
+
+    XLSX.writeFile(wb, "Student_Master_Data.xlsx");
+
+    alert("Excel exported successfully!");
+}
 
 /* =========================================================
    LOGIN / ROLE SYSTEM
@@ -143,37 +173,3 @@ function ensureTodayIsInitialized() {
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
-
-function exportStudentsToExcel() {
-    let students = JSON.parse(localStorage.getItem("students")) || [];
-
-    if (students.length === 0) {
-        alert("No student data found!");
-        return;
-    }
-
-    // Convert structure exactly as stored
-    let exportData = students.map(s => ({
-        "Student ID": s.id || "",
-        "Name": s.name || "",
-        "Guardian": s.guardian || "",
-        "Date of Birth": s.dob || "",
-        "Address": s.address || "",
-        "Belt": s.belt || "",
-        "Phone": s.phone || "",
-        "Created At": s.createdAt || "",
-        "Updated At": s.updatedAt || ""
-    }));
-
-    // Convert JSON → Excel Sheet
-    let ws = XLSX.utils.json_to_sheet(exportData);
-
-    // Create Workbook
-    let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Students");
-
-    // File Download
-    XLSX.writeFile(wb, "Student_Master_Data.xlsx");
-
-    alert("Excel exported successfully!");
-}
