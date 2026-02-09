@@ -41,11 +41,11 @@ function exportStudentsToExcel() {
     }
 
     // CSV header
-    let csv = "Student ID,Name,Guardian,Date of Birth,Address,Belt,Phone,Created At,Updated At\n";
+    let csv = "Student ID,Name,Guardian,Date of Birth,Address,Belt,Phone\n";
 
     // Add student rows
     students.forEach(s => {
-        csv += `"${s.id || ""}","${s.name || ""}","${s.guardian || ""}","${s.dob || ""}","${s.address || ""}","${s.belt || ""}","${s.phone || ""}","${s.createdAt || ""}","${s.updatedAt || ""}"\n`;
+        csv += `"${s.id || ""}","${s.name || ""}","${s.guardian || ""}","${s.dob || ""}","${s.address || ""}","${s.belt || ""}","${s.phone || ""}"\n`;
     });
 
     // Create downloadable CSV file
@@ -173,5 +173,6 @@ function ensureTodayIsInitialized() {
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
+
 
 
