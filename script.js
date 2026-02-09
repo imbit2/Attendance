@@ -33,12 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 function exportStudentsToExcel() {
-    // Check if XLSX library loaded
-    if (typeof XLSX === "undefined") {
-        alert("Excel library not loaded. Please check your script includes.");
-        return;
-    }
-
     let students = JSON.parse(localStorage.getItem("students")) || [];
 
     if (students.length === 0) {
@@ -46,39 +40,28 @@ function exportStudentsToExcel() {
         return;
     }
 
-    // Column order is FIXED
-    const exportData = students.map(s => ({
-        "Student ID": s.id || "",
-        "Name": s.name || "",
-        "Guardian": s.guardian || "",
-        "Date of Birth": s.dob || "",
-        "Address": s.address || "",
-        "Belt": s.belt || "",
-        "Phone": s.phone || "",
-        "Created At": s.createdAt || "",
-        "Updated At": s.updatedAt || ""
-    }));
+    // CSV header
+    let csv = "Student ID,Name,Guardian,Date of Birth,Address,Belt,Phone,Created At,Updated At\n";
 
-    // Create worksheet
-    const ws = XLSX.utils.json_to_sheet(exportData, {
-        header: [
-            "Student ID", "Name", "Guardian", "Date of Birth",
-            "Address", "Belt", "Phone", "Created At", "Updated At"
-        ]
+    // Add student rows
+    students.forEach(s => {
+        csv += `"${s.id || ""}","${s.name || ""}","${s.guardian || ""}","${s.dob || ""}","${s.address || ""}","${s.belt || ""}","${s.phone || ""}","${s.createdAt || ""}","${s.updatedAt || ""}"\n`;
     });
 
-    // Auto-width for all columns
-    ws['!cols'] = Object.keys(exportData[0]).map(k => ({ wch: 20 }));
+    // Create downloadable CSV file
+    let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    let url = URL.createObjectURL(blob);
 
-    // Create workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Students");
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "Student_Master_Data.csv";
+    a.click();
 
-    // Save file
-    XLSX.writeFile(wb, "Student_Master_Data.xlsx");
+    URL.revokeObjectURL(url);
 
-    alert("Student Excel exported successfully!");
+    alert("CSV exported successfully!");
 }
+
 
 /* =========================================================
    LOGIN / ROLE SYSTEM
@@ -190,4 +173,5 @@ function ensureTodayIsInitialized() {
 window.addEventListener("pageshow", event => {
   if (event.persisted) window.location.reload();
 });
+
 
