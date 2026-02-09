@@ -152,31 +152,28 @@ function exportStudentsToExcel() {
         return;
     }
 
-    // Convert student object into clean table format
+    // Convert structure exactly as stored
     let exportData = students.map(s => ({
-        "Student ID": s.id,
-        "Name": s.name,
-        "DOB": s.dob || "",
-        "Gender": s.gender || "",
-        "Mobile": s.phone || "",
+        "Student ID": s.id || "",
+        "Name": s.name || "",
         "Guardian": s.guardian || "",
+        "Date of Birth": s.dob || "",
         "Address": s.address || "",
-        "Belt": s.belt || ""
+        "Belt": s.belt || "",
+        "Phone": s.phone || "",
+        "Created At": s.createdAt || "",
+        "Updated At": s.updatedAt || ""
     }));
 
-    // Create sheet
+    // Convert JSON → Excel Sheet
     let ws = XLSX.utils.json_to_sheet(exportData);
 
-    // Create workbook
+    // Create Workbook
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Students");
 
-    // Export file
+    // File Download
     XLSX.writeFile(wb, "Student_Master_Data.xlsx");
 
     alert("Excel exported successfully!");
 }
-
-
-
-
